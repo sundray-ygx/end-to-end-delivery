@@ -1,0 +1,22 @@
+{
+  "name": "end-to-end-delivery",
+  "description": "端到端价值交付闭环开发流程 - 整合superpowers、everything-claude-code、feature-dev三大插件优势",
+  "author": {
+    "name": "Claude Code User"
+  },
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "workflow",
+    "agents",
+    "skills",
+    "commands",
+    "rules",
+    "tdd",
+    "code-review",
+    "delivery",
+    "end-to-end"
+  ],
+  "commands": "./commands",
+  "skills": "./skills"
+}
