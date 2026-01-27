@@ -13,12 +13,16 @@ description: 本地开发流程模板适配器 - 融合本地开发流程模板�
 
 ### 插件默认模板
 ```
-~/.claude/plugins/marketplaces/end-to-end-delivery/templates/
+{插件目录}/templates/
 ├── project-structure/     # 项目结构模板
 ├── documentation/         # 文档模板
 ├── custom-workflow/       # 自定义工作流模板
-└── coding-standards/      # 代码规范模板
+└── coding-standards/      # 代码规范模板（预留）
 ```
+
+插件实际安装位置：
+- **缓存目录**: `~/.claude/plugins/cache/local-plugins/end-to-end-delivery/1.0.0/templates/`
+- **市场目录**: `~/.claude/plugins/marketplaces/end-to-end-delivery/templates/`
 
 ### 项目本地模板
 ```
@@ -155,7 +159,7 @@ description: 本地开发流程模板适配器 - 融合本地开发流程模板�
 插件启动时自动加载模板:
 
 1. **插件默认模板**
-   - 从 `~/.claude/plugins/marketplaces/end-to-end-delivery/templates/` 加载
+   - 从插件安装目录加载 (`~/.claude/plugins/cache/local-plugins/end-to-end-delivery/1.0.0/templates/`)
    - 作为后备模板
 
 2. **项目本地模板**

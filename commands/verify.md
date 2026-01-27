@@ -159,5 +159,5 @@ git diff HEAD~1 --name-only
 
 质量验证完成后，进入价值交付阶段:
 ```bash
-/phase:deliver
+/delivery
 ```

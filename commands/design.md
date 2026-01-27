@@ -158,5 +158,5 @@ argument-hint: (可选) 方案选择偏好
 
 架构设计完成后，进入实施执行阶段:
 ```bash
-/phase:implement
+/implement
 ```

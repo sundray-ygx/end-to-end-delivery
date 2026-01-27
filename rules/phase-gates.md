@@ -125,7 +125,7 @@
 ### 自动检查
 ```bash
 # 每个阶段结束时自动运行检查
-/phase:verify --gate-check
+/verify --gate-check
 ```
 
 ### 手动确认

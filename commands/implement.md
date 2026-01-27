@@ -112,5 +112,5 @@ Coverage: 95%"
 
 实施执行完成后，进入质量验证阶段:
 ```bash
-/phase:verify
+/verify
 ```

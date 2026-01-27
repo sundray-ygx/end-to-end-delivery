@@ -35,8 +35,12 @@ Discovery → Exploration → Design → Implementation → Verification → Del
 
 ### 1. 安装插件
 
+插件通过本地插件方式安装，实际运行位置：
+- **安装位置**: `~/.claude/plugins/cache/local-plugins/end-to-end-delivery/1.0.0/`
+- **源位置**: `~/.claude/plugins/marketplaces/end-to-end-delivery/`
+
 ```bash
-# 添加到 Claude Code
+# 从市场复制到本地（如需要）
 cp -r ~/.claude/plugins/marketplaces/end-to-end-delivery ~/.claude/plugins/
 ```
 
@@ -47,12 +51,12 @@ cp -r ~/.claude/plugins/marketplaces/end-to-end-delivery ~/.claude/plugins/
 /deliver "实现用户登录功能"
 
 # 或分阶段执行
-/phase:discovery "实现用户登录功能"
-/phase:exploration
-/phase:design
-/phase:implement
-/phase:verify
-/phase:deliver
+/discovery "实现用户登录功能"
+/exploration
+/design
+/implement
+/verify
+/delivery
 ```
 
 ## 目录结构
@@ -80,13 +84,13 @@ end-to-end-delivery/
 │   ├── continuous-learning/ # 持续学习
 │   └── template-adapter/    # 模板适配器
 ├── commands/                # 命令定义
-│   ├── deliver.md           # /deliver 命令
-│   ├── phase-discovery.md   # /phase:discovery 命令
-│   ├── phase-exploration.md # /phase:exploration 命令
-│   ├── phase-design.md      # /phase:design 命令
-│   ├── phase-implement.md   # /phase:implement 命令
-│   ├── phase-verify.md      # /phase:verify 命令
-│   └── phase-deliver.md     # /phase:deliver 命令
+│   ├── deliver.md           # /deliver 命令（完整流程）
+│   ├── discovery.md         # /discovery 命令（需求发现阶段）
+│   ├── exploration.md       # /exploration 命令（代码库探索阶段）
+│   ├── design.md            # /design 命令（架构设计阶段）
+│   ├── implement.md         # /implement 命令（实施执行阶段）
+│   ├── verify.md            # /verify 命令（质量验证阶段）
+│   └── delivery.md          # /delivery 命令（价值交付阶段）
 ├── rules/                   # 规则定义
 │   ├── phase-gates.md       # 阶段门禁规则
 │   ├── quality-standards.md # 质量标准
@@ -113,7 +117,7 @@ end-to-end-delivery/
 - 验收标准定义
 - 风险识别
 
-**命令**: `/phase:discovery`
+**命令**: `/discovery`
 
 **代理**: `discovery-agent`
 
@@ -130,7 +134,7 @@ end-to-end-delivery/
 - 相关功能分析
 - 关键文件标注
 
-**命令**: `/phase:exploration`
+**命令**: `/exploration`
 
 **代理**: `exploration-agent`
 
@@ -147,7 +151,7 @@ end-to-end-delivery/
 - 推荐方案
 - 实施蓝图
 
-**命令**: `/phase:design`
+**命令**: `/design`
 
 **代理**: `design-agent`
 
@@ -169,7 +173,7 @@ end-to-end-delivery/
 - 自审与修复
 - 频繁提交
 
-**命令**: `/phase:implement`
+**命令**: `/implement`
 
 **代理**: `implementation-agent`
 
@@ -189,7 +193,7 @@ end-to-end-delivery/
 - 测试验证
 - 安全扫描
 
-**命令**: `/phase:verify`
+**命令**: `/verify`
 
 **代理**: `verification-agent`
 
@@ -214,7 +218,7 @@ npm test -- --coverage
 - 价值验证
 - 模式提取
 
-**命令**: `/phase:deliver`
+**命令**: `/delivery`
 
 **代理**: `delivery-agent`
 
