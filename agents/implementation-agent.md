@@ -219,7 +219,19 @@ npm test xxx.test.ts
 
 ## 编码规范检查（模板融合）
 
-### 步骤 1: 检测编程语言
+### ⚠️ 强制执行要求
+
+**必须生成编码规范检查报告**：
+
+#### 输出：编码规范检查报告
+- **文件名**: `docs/05_编码规范检查报告.md`
+- **格式**: 按照checklist模板格式
+- **内容**: 逐项检查结果、问题列表、修复建议
+- **目的**: 确保代码符合企业编码规范
+
+### 🔧 执行步骤（强制执行）
+
+#### 步骤 1: 检测编程语言
 
 使用 `utils/language-detector.md` 中的方法自动检测项目使用的编程语言：
 
@@ -241,7 +253,86 @@ console.log(`检测到项目语言: ${language}`);
 - Java (.java)
 - 其他
 
-### 步骤 2: 加载编码 Checklist
+#### 步骤 2: 读取对应的编码 Checklist
+
+**根据检测到的语言使用 Read 工具读取对应的编码checklist**：
+
+```bash
+# 使用 Read 工具读取以下模板文件
+Read templates/coding/coding-checklist-{language}.md
+```
+
+**Checklist 映射**：
+
+| 语言 | Checklist 模板 |
+|------|---------------|
+| Python | `templates/coding/coding-checklist-python.md` |
+| Go | `templates/coding/coding-checklist-go.md` |
+| JavaScript/TypeScript | `templates/coding/coding-checklist-js.md` |
+| C/C++ | `templates/coding/coding-checklist-c-cpp.md` |
+| Shell | `templates/coding/coding-checklist-shell.md` |
+| PHP | `templates/coding/coding-checklist-php.md` |
+| 其他 | `templates/coding/coding-checklist-other.md` |
+
+#### 步骤 3: 逐项检查并生成报告
+
+**强制检查项**：
+- [ ] 命名规范
+- [ ] 代码格式
+- [ ] 类型注解（如适用）
+- [ ] 文档字符串/注释
+- [ ] 错误处理
+- [ ] 其他语言特定规范
+
+**报告格式（必须遵循）**：
+
+```markdown
+# 编码规范检查报告
+
+## 项目信息
+- 语言: [Python/Go/C/etc]
+- 检查时间: [YYYY-MM-DD HH:MM]
+- 检查文件: [数量]个
+- 检查代码行数: [数量]行
+
+## 检查结果
+
+### 通过项 (X/Y)
+- ✅ 检查项1
+- ✅ 检查项2
+- ...
+
+### 失败项 (Z/Y)
+- ❌ 检查项
+  - 文件: [file:line]
+  - 实际: [实际内容]
+  - 建议: [修复建议]
+  - 优先级: [高/中/低]
+- ...
+
+## 总体评估
+- 通过率: [X/Y]%
+- 状态: [通过/需改进/不通过]
+- 建议: [改进建议]
+
+## 修复计划
+### 高优先级问题
+1. [问题1] - [修复方案]
+2. [问题2] - [修复方案]
+
+### 中优先级问题
+1. [问题3] - [修复方案]
+
+### 低优先级问题
+1. [问题4] - [修复方案]
+```
+
+**验证失败处理**：
+```
+如果通过率 < 80%，必须修复代码或说明原因后才能继续。
+```
+
+### 步骤 4: 原有加载编码 Checklist（保留为参考）
 
 根据检测到的语言加载对应的编码规范 checklist：
 
@@ -251,17 +342,7 @@ const checklistPath = await getCodingChecklist(language);
 const checklist = await loadTemplate(checklistPath);
 ```
 
-**Checklist 映射：**
-
-| 语言 | Checklist 模板 |
-|------|---------------|
-| Python | `coding/coding-checklist-python.md` |
-| Go | `coding/coding-checklist-go.md` |
-| JavaScript/TypeScript | `coding/coding-checklist-js.md` |
-| C/C++ | `coding/coding-checklist-c-cpp.md` |
-| Shell | `coding/coding-checklist-shell.md` |
-
-### 步骤 3: 应用编码规范
+### 步骤 5: 应用编码规范（编码时参考）
 
 在编码过程中检查清单项，确保代码符合规范：
 
@@ -363,9 +444,9 @@ const checklist = await loadTemplate(checklistPath);
 - [ ] 使用 godoc 格式
 ```
 
-### 步骤 4: 编码时检查
+### 步骤 6: 编码时检查（参考）
 
-在编码过程中逐项检查清单：
+在编码过程中逐项检查清单（可选）：
 
 ```javascript
 // 在编写代码时，实时检查 checklist
@@ -386,7 +467,7 @@ function checkCodingStandards(code, checklist) {
 }
 ```
 
-### 步骤 5: 生成检查报告
+### 📄 编码规范检查报告示例（参考格式）
 
 完成编码后，生成编码规范检查报告：
 

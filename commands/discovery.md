@@ -144,6 +144,63 @@ argument-hint: 功能需求描述
 - [ ] 风险已评估
 - [ ] 用户已确认
 
+---
+
+## 📋 模板格式验证（强制执行）
+
+**生成文档后，必须执行以下验证**：
+
+### 验证步骤
+
+#### 步骤1：读取模板文件
+```markdown
+根据复杂度评估结果，读取对应的模板文件：
+
+**高复杂度（瀑布流）**：
+Read templates/requirements/waterfall/user-requirements-spec-v2.2.md
+Read templates/requirements/waterfall/system-requirements-spec-v3.9.md
+
+**中/低复杂度（敏捷）**：
+Read templates/requirements/agile/Epic.md
+Read templates/requirements/agile/Feature.md
+Read templates/requirements/agile/Story.md
+```
+
+#### 步骤2：对比文档结构
+```markdown
+对比生成的标准化文档与模板：
+1. 检查所有一级标题是否存在
+2. 检查章节顺序是否正确
+3. 检查格式规范是否遵循
+```
+
+#### 步骤3：验证结果确认
+```markdown
+## 模板格式验证报告
+
+### AI分析报告
+- 状态：✅ 已生成
+- 文件：docs/01_需求发现报告.md
+
+### 标准化需求文档
+- 模板类型：[瀑布流/敏捷]
+- 状态：[✅验证通过 / ❌验证失败]
+- 文件：docs/02_XXX.md
+
+### 验证结果详情
+- 一级标题完整性：[X/Y]
+- 章节顺序正确性：[是/否]
+- 格式规范符合性：[符合/不符合]
+
+### 验证结论
+[ ] 通过 - 可以进入下一阶段
+[ ] 失败 - 需要重新生成标准化文档
+```
+
+**不通过验证不得进入下一阶段**
+
+---
+
 ## 下一阶段
 
 需求发现完成后，进入代码库探索阶段:
