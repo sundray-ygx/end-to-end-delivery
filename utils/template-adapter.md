@@ -236,6 +236,154 @@ async function detectProjectLanguage(projectPath) {
 }
 ```
 
+### 9. getE2ETestingFramework(projectPath)
+
+检测项目的 E2E 测试框架。
+
+```javascript
+/**
+ * 检测 E2E 测试框架
+ * @param {string} projectPath - 项目路径
+ * @returns {Object} 框架信息
+ */
+async function getE2ETestingFramework(projectPath) {
+  // 检测 Playwright
+  if (fs.existsSync(path.join(projectPath, 'playwright.config.ts'))) {
+    return {
+      framework: 'playwright',
+      config: 'playwright.config.ts',
+      testDir: 'tests/e2e',
+      command: 'npx playwright test'
+    };
+  }
+
+  // 检测 Cypress
+  if (fs.existsSync(path.join(projectPath, 'cypress.config.ts'))) {
+    return {
+      framework: 'cypress',
+      config: 'cypress.config.ts',
+      testDir: 'cypress/e2e',
+      command: 'npx cypress run'
+    };
+  }
+
+  // 默认推荐 Playwright
+  return {
+    framework: 'playwright',
+    recommended: true,
+    installCommand: 'npm install -D @playwright/test'
+  };
+}
+```
+
+### 10. getPerformanceTestingTools()
+
+获取性能测试工具配置。
+
+```javascript
+/**
+ * 获取性能测试工具配置
+ * @returns {Object} 工具配置
+ */
+async function getPerformanceTestingTools() {
+  return {
+    primary: {
+      name: 'k6',
+      install: {
+        macos: 'brew install k6',
+        linux: 'curl https://github.com/grafana/k6/releases/download/v0.47.0/k6-v0.47.0-linux-amd64.tar.gz -L | tar xvz'
+      },
+      config: 'k6/config',
+      tests: 'k6/tests'
+    },
+    secondary: {
+      name: 'JMeter',
+      description: '用于复杂性能测试场景',
+      install: '从 https://jmeter.apache.org/download_jmeter.cgi 下载'
+    },
+    profiling: {
+      cpu: 'perf, flamegraph',
+      memory: 'heapdump, valgrind',
+      network: 'wireshark, tcpdump'
+    }
+  };
+}
+```
+
+### 11. extractTestCasesFromDesign(designDoc)
+
+从设计文档提取测试用例。
+
+```javascript
+/**
+ * 从设计文档提取业务逻辑测试用例
+ * @param {string} designDoc - 设计文档路径
+ * @returns {Array} 测试用例列表
+ */
+async function extractTestCasesFromDesign(designDoc) {
+  const content = await fs.readFile(designDoc, 'utf-8');
+
+  // 提取 "业务逻辑相关的测试用例" 章节
+  const testCasesSection = extractSection(content, '业务逻辑相关的测试用例');
+
+  // 解析测试用例
+  const testCases = parseTestCases(testCasesSection);
+
+  return testCases;
+}
+```
+
+### 12. extractUserStoriesFromDiscovery(discoveryDoc)
+
+从需求文档提取 User Story 验收标准。
+
+```javascript
+/**
+ * 从需求文档提取 User Story 验收标准
+ * @param {string} discoveryDoc - 需求文档路径
+ * @returns {Array} User Stories with Given-When-Then
+ */
+async function extractUserStoriesFromDiscovery(discoveryDoc) {
+  const content = await fs.readFile(discoveryDoc, 'utf-8');
+
+  // 提取 Story 章节的 A/C 验收条件
+  const stories = extractStories(content);
+
+  // 解析 Given-When-Then
+  return stories.map(story => ({
+    title: story.title,
+    userStory: story.userStory,
+    acceptanceCriteria: {
+      given: story.given,
+      when: story.when,
+      then: story.then
+    }
+  }));
+}
+```
+
+### 13. getBlackboxTestingChecklist()
+
+获取黑盒测试 checklist。
+
+```javascript
+/**
+ * 获取黑盒测试 checklist
+ * @returns {Object} 黑盒测试维度
+ */
+async function getBlackboxTestingChecklist() {
+  const checklistPath = 'templates/testing/blackbox-testing-checklist.md';
+
+  // 加载 checklist 并提取审查维度
+  const dimensions = await extractChecklistDimensions(checklistPath);
+
+  return {
+    path: checklistPath,
+    dimensions: dimensions,
+  };
+}
+```
+
 ## 使用示例
 
 ### 示例 1: Discovery Agent 使用
@@ -385,6 +533,51 @@ async function generateDeliverySummary(phaseAnalysis) {
   const report = generateEndToEndSummary(summary);
 
   return report;
+}
+```
+
+### 示例 7: Verification Agent 黑盒测试使用
+
+```javascript
+// 在 Verification Agent 中进行黑盒测试验证
+
+async function verifyBlackboxTests(projectPath) {
+  // 1. 检测 E2E 测试框架
+  const e2eFramework = await templateAdapter.getE2ETestingFramework(projectPath);
+
+  // 2. 获取性能测试工具配置
+  const perfTools = await templateAdapter.getPerformanceTestingTools();
+
+  // 3. 获取黑盒测试 checklist 并提取审查维度
+  const blackboxChecklist = await templateAdapter.getBlackboxTestingChecklist();
+
+  // 4. 从 Discovery 阶段提取 User Stories（用于 E2E 测试）
+  const discoveryDoc = path.join(projectPath, 'docs/01_需求发现报告.md');
+  const userStories = await templateAdapter.extractUserStoriesFromDiscovery(discoveryDoc);
+
+  // 5. 从 Design 阶段提取测试用例（用于集成测试）
+  const designDoc = path.join(projectPath, 'docs/02_设计分析报告.md');
+  const testCases = await templateAdapter.extractTestCasesFromDesign(designDoc);
+
+  // 6. 基于黑盒测试维度进行深度审查
+  const blackboxReviewResults = await reviewBlackboxTestsByDimensions(
+    projectPath,
+    blackboxChecklist.dimensions,
+    {
+      e2eFramework,
+      perfTools,
+      userStories,
+      testCases
+    }
+  );
+
+  return {
+    e2eFramework,
+    perfTools,
+    userStories,
+    testCases,
+    reviewResults: blackboxReviewResults,
+  };
 }
 ```
 

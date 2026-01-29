@@ -331,9 +331,9 @@ git diff HEAD~1 -- file.ts
 - [ ] 变更粒度合理
 - [ ] 提交信息清晰
 
-### Phase 6.5: 测试质量验证（模板融合）
+### Phase 8: 测试质量验证（模板融合）
 
-#### 6.5.1 测试维度覆盖度验证
+#### 8.1 测试维度覆盖度验证
 
 验证测试审查是否覆盖了测试checklist的所有关键维度：
 
@@ -349,7 +349,7 @@ git diff HEAD~1 -- file.ts
 - [ ] 可维护性维度覆盖
 ```
 
-#### 6.5.2 测试质量门禁验证
+#### 8.2 测试质量门禁验证
 
 验证测试质量是否达到门禁标准：
 
@@ -366,7 +366,7 @@ git diff HEAD~1 -- file.ts
 - [ ] 覆盖率 ≥ 80%
 ```
 
-#### 6.5.3 测试覆盖率详细验证
+#### 8.3 测试覆盖率详细验证
 
 ```bash
 # 运行测试并生成详细覆盖率报告
@@ -402,7 +402,7 @@ npm test -- --coverage 2>&1 | tail -50
 - 更新覆盖率排除规则
 ```
 
-#### 6.5.4 测试代码质量验证
+#### 8.4 测试代码质量验证
 
 ```bash
 # 检查测试代码规范
@@ -417,6 +417,448 @@ npm run lint -- "src/**/*.test.ts" 2>&1 | head -30
 - [ ] 测试命名清晰有意义
 - [ ] 测试代码无重复
 - [ ] 测试文件组织合理
+
+### Phase 9: 用户场景测试（E2E）- 可选验证
+
+> ⚠️ **可选验证**：本阶段为可选黑盒测试，用于验证端到端用户旅程。
+
+#### 9.1 基于 Discovery Story 生成 E2E 测试
+
+**输入来源**：
+- Discovery 阶段输出：`docs/01_需求发现报告.md`
+- User Story 验收标准（Given-When-Then 格式）
+
+**提取验收标准**：
+```markdown
+从 Discovery 阶段的 Story A/C 提取测试场景：
+
+**示例 Story**:
+```
+作为 <用户角色>,
+我想要 <完成 xxx 活动>,
+以便于 <实现 xxx 价值>
+
+A/C 验收条件:
+Given: 用户在登录页面，已输入邮箱和密码
+When: 用户点击"登录"按钮
+Then: 系统验证凭据，成功后跳转到首页并显示欢迎消息
+```
+
+**生成对应 E2E 测试**:
+```typescript
+// tests/e2e/login.spec.ts
+import { test, expect } from '@playwright/test';
+
+test('user login journey', async ({ page }) => {
+  // Given: 用户在登录页面
+  await page.goto('/login');
+
+  // When: 输入凭据并点击登录
+  await page.fill('[data-testid=email]', 'user@example.com');
+  await page.fill('[data-testid=password]', 'password123');
+  await page.click('[data-testid=login-button]');
+
+  // Then: 验证跳转和欢迎消息
+  await expect(page).toHaveURL('/home');
+  await expect(page.locator('[data-testid=welcome-message]'))
+    .toContainText('欢迎回来');
+});
+```
+```
+
+#### 9.2 Playwright 配置和执行
+
+**检测 Playwright**：
+```bash
+# 检查 Playwright 是否已安装
+if [ -f "playwright.config.ts" ]; then
+  echo "检测到 Playwright"
+  npx playwright test
+else
+  echo "未检测到 Playwright，建议安装："
+  echo "npm install -D @playwright/test"
+  echo "npx playwright install"
+fi
+```
+
+**执行命令**：
+```bash
+# 运行 E2E 测试
+npx playwright test
+
+# 指定浏览器
+npx playwright test --project=chromium
+npx playwright test --project=webkit
+npx playwright test --project=firefox
+
+# 生成 Artifact
+npx playwright test --reporter=html
+npx playwright show-report
+```
+
+#### 9.3 E2E 测试验证点
+
+**验证点**：
+- [ ] 关键用户旅程覆盖（基于 Discovery Story A/C）
+- [ ] 测试通过率 = 100%
+- [ ] 无 flaky 测试（连续运行 3 次全部通过）
+- [ ] Artifact 生成（截图、视频、trace）
+- [ ] 跨浏览器兼容性（Chromium, Firefox, WebKit）
+- [ ] 测试执行时间 ≤ 5 分钟
+
+**如果 E2E 测试失败**：
+```markdown
+## ❌ E2E 测试失败
+
+**失败测试**: tests/e2e/login.spec.ts:15
+**错误信息**: Timeout waiting for selector [data-testid=welcome-message]
+
+**可能原因**:
+- 登录接口响应超时
+- 页面跳转逻辑错误
+- 选择器定位失败
+
+**下一步**:
+1. 查看 trace 文件: playwright show-report
+2. 检查截图和视频
+3. 修复问题后重新验证
+```
+
+#### 9.4 集成 e2e-runner（可选）
+
+如果 `everything-claude-code:e2e-runner` 可用，可以调用其能力：
+- 自动化测试旅程创建
+- Artifact 管理和上传
+- 测试报告生成
+- CI/CD 集成
+
+### Phase 10: 功能集成测试 - 可选验证
+
+> ⚠️ **可选验证**：本阶段为可选黑盒测试，用于验证功能集成和真实数据场景。
+
+#### 10.1 API 功能完整性测试
+
+**验证点**：
+- [ ] RESTful API 端点功能验证
+- [ ] GraphQL 查询/变更验证
+- [ ] API 契约符合性（OpenAPI/Swagger）
+- [ ] 错误码和错误处理验证
+
+**测试工具**：
+- JavaScript/TypeScript: Jest + Supertest
+- Python: pytest + requests
+- Go: testing + httptest
+
+**示例测试**：
+```typescript
+// tests/integration/api/users-api.test.ts
+import request from 'supertest';
+import app from '../../src/app';
+
+describe('Users API Integration Tests', () => {
+  test('POST /api/users should create user and return 201', async () => {
+    const response = await request(app)
+      .post('/api/users')
+      .send({
+        email: 'test@example.com',
+        password: 'SecurePass123'
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('id');
+    expect(response.body.email).toBe('test@example.com');
+  });
+});
+```
+
+**执行命令**：
+```bash
+# JavaScript/TypeScript
+npm run test:integration
+
+# Python
+pytest tests/integration/
+
+# Go
+go test ./tests/integration/...
+```
+
+#### 10.2 数据库集成测试
+
+**验证点**：
+- [ ] CRUD 操作完整性
+- [ ] 事务回滚测试
+- [ ] 数据一致性验证
+- [ ] 外键约束验证
+
+**测试策略**：
+- 使用测试数据库（Docker/内存数据库）
+- 每个测试独立事务
+- 测试后自动清理
+- 使用 fixture 加载测试数据
+
+**示例测试**：
+```python
+# tests/integration/database/test_user_repository.py
+import pytest
+from src.repositories.user_repository import UserRepository
+
+@pytest.fixture
+def db_session():
+    """创建测试数据库会话"""
+    session = create_test_session()
+    yield session
+    session.rollback()
+    session.close()
+
+def test_create_user(db_session):
+    """测试创建用户"""
+    repo = UserRepository(db_session)
+    user = repo.create({
+        'email': 'test@example.com',
+        'password_hash': 'hash'
+    })
+
+    assert user.id is not None
+    assert user.email == 'test@example.com'
+```
+
+#### 10.3 第三方服务集成测试
+
+**验证点**：
+- [ ] 外部 API 调用正确性
+- [ ] 错误处理和重试逻辑
+- [ ] 超时处理
+- [ ] 认证/授权验证
+
+**Mock vs 真实集成**：
+- **高优先级**：使用真实测试环境（如 Stripe Test Mode）
+- **中优先级**：使用 Mock Server（如 MSW）
+- **低优先级**：单元测试级别的 mock
+
+**集成测试验证点**：
+- [ ] API 功能完整性
+- [ ] 数据库集成正确性
+- [ ] 第三方服务集成稳定性
+- [ ] 错误场景覆盖
+
+**如果集成测试失败**：
+```markdown
+## ❌ 集成测试失败
+
+**失败类型**: API 集成
+**错误信息**: Expected status 201, but got 500
+
+**可能原因**:
+- 数据库连接失败
+- 外部服务不可用
+- 数据格式不匹配
+
+**下一步**:
+1. 检查日志
+2. 验证数据库连接
+3. 修复问题后重新验证
+```
+
+### Phase 11: 性能测试（DFX）- 可选验证
+
+> ⚠️ **可选验证**：本阶段为可选黑盒测试，用于验证系统性能和 DFX 维度。
+
+#### 11.1 性能测试工具选择
+
+**支持的工具**：
+- **k6**（推荐）：开发者友好、JavaScript API、CI/CD 友好
+- **JMeter**：功能强大、GUI 界面、适合复杂场景
+
+**检测和安装**：
+```bash
+# 检测 k6
+if command -v k6 &> /dev/null; then
+  echo "k6 已安装"
+else
+  echo "安装 k6："
+  # macOS
+  brew install k6
+  # Linux
+  curl https://github.com/grafana/k6/releases/download/v0.47.0/k6-v0.47.0-linux-amd64.tar.gz -L | tar xvz
+fi
+
+# JMeter（GUI，通常手动安装）
+```
+
+#### 11.2 响应时间测试
+
+**目标**：验证 API 和页面响应时间符合预期
+
+**基线设置**：
+```javascript
+// k6/config/benchmarks.yaml
+export const options = {
+  thresholds: {
+    http_req_duration: ['p(95)<500', 'p(99)<1000'],
+  },
+};
+```
+
+**测试脚本**：
+```javascript
+// k6/tests/api-response-time.js
+import http from 'k6/http';
+import { check } from 'k6';
+
+export default function () {
+  const response = http.get('https://api.example.com/users');
+
+  check(response, {
+    'status is 200': (r) => r.status === 200,
+    'response time < 500ms': (r) => r.timings.duration < 500,
+  });
+}
+```
+
+**执行命令**：
+```bash
+# k6
+k6 run k6/tests/api-response-time.js
+
+# JMeter
+jmeter -n -t test-plan.jmx -l results.jtl -e -o ./report
+```
+
+#### 11.3 并发用户测试
+
+**目标**：验证系统在多用户并发下的稳定性
+
+**测试场景**：
+```javascript
+// k6/tests/concurrent-users.js
+export const options = {
+  stages: [
+    { duration: '2m', target: 100 },  // 2分钟爬升到100用户
+    { duration: '5m', target: 100 },  // 维持100用户5分钟
+    { duration: '2m', target: 200 },  // 爬升到200用户
+    { duration: '5m', target: 200 },  // 维持200用户5分钟
+    { duration: '2m', target: 0 },    // 降到0
+  ],
+  thresholds: {
+    http_req_failed: ['rate<0.01'],     // 错误率 < 1%
+    http_req_duration: ['p(95)<2000'],  // 95%请求 < 2s
+  },
+};
+```
+
+**验收标准**：
+- [ ] 错误率 < 1%
+- [ ] P95 响应时间 < 2s
+- [ ] 无内存泄漏
+- [ ] 数据库连接池正常
+
+#### 11.4 负载测试
+
+**目标**：找到系统性能瓶颈和崩溃点
+
+**测试场景**：
+```javascript
+// k6/tests/load-test.js
+export const options = {
+  stages: [
+    { duration: '5m', target: 50 },
+    { duration: '5m', target: 100 },
+    { duration: '5m', target: 200 },
+    { duration: '5m', target: 400 },
+    { duration: '5m', target: 800 },
+    { duration: '10m', target: 0 },  // 恢复阶段
+  ],
+};
+```
+
+**输出**：
+- 最大并发用户数
+- 崩溃点识别
+- 瓶颈分析（数据库/CPU/网络）
+
+#### 11.5 资源使用监控
+
+**监控指标**：
+```bash
+# CPU 使用率
+top -b -n 1 | grep "Cpu(s)"
+
+# 内存使用
+free -m
+
+# 磁盘 I/O
+iostat -x 1
+
+# 数据库连接池
+# PostgreSQL
+SELECT count(*) FROM pg_stat_activity;
+```
+
+#### 11.6 DFX 维度覆盖
+
+**Design for X (DFX) 维度验证**：
+
+1. **性能**：
+   - [ ] 响应时间达标（P50/P95/P99）
+   - [ ] 吞吐量达标
+   - [ ] 资源使用合理
+
+2. **可靠性**：
+   - [ ] 错误率 < 0.1%
+   - [ ] 故障恢复时间
+   - [ ] 数据一致性
+
+3. **可扩展性**：
+   - [ ] 水平扩展能力
+   - [ ] 垂直扩展能力
+   - [ ] 缓存策略有效性
+
+4. **可维护性**：
+   - [ ] 监控点完整
+   - [ ] 日志记录完整
+   - [ ] 告警机制有效
+
+5. **安全性**：
+   - [ ] 认证性能
+   - [ ] 加密性能
+   - [ ] DDoS 防护
+
+#### 11.7 性能测试验证点
+
+**验证点**：
+- [ ] 响应时间达标（P50/P95/P99）
+- [ ] 并发用户测试通过
+- [ ] 负载测试识别瓶颈
+- [ ] 资源使用在合理范围
+- [ ] DFX 维度覆盖完整
+
+**如果性能测试失败**：
+```markdown
+## ❌ 性能测试失败
+
+**失败类型**: 响应时间
+**指标**: P95 响应时间 1500ms（要求 < 500ms）
+
+**可能原因**:
+- 数据库查询未优化
+- 缓存未生效
+- 网络延迟
+
+**下一步**:
+1. 分析性能瓶颈
+2. 优化慢查询/慢接口
+3. 添加缓存
+4. 重新验证
+```
+
+#### 11.8 集成 Performance Engineer（可选）
+
+如果 `performance-engineer` agent 可用，可以调用其能力：
+- OpenTelemetry 分布式追踪
+- APM 平台集成
+- 性能预算设置
+- 性能回归检测
 
 ---
 
@@ -438,10 +880,13 @@ npm run lint -- "src/**/*.test.ts" 2>&1 | head -30
 | 安全 | ✅ PASS / ❌ FAIL | [详情] |
 | 维度覆盖度 | ✅ PASS / ❌ FAIL | [详情] (模板融合) |
 | 测试质量 | ✅ PASS / ❌ FAIL | [详情] (模板融合) |
+| E2E 测试 | ⚠️ SKIP / ✅ PASS / ❌ FAIL | [详情] (可选) |
+| 集成测试 | ⚠️ SKIP / ✅ PASS / ❌ FAIL | [详情] (可选) |
+| 性能测试 | ⚠️ SKIP / ✅ PASS / ❌ FAIL | [详情] (可选) |
 
 ## 总体评估
 
-**状态**: ✅ READY / ❌ NOT READY
+**状态**: ✅ READY / ❌ NOT READY / ⚠️ PARTIAL（仅白盒通过，黑盒跳过）
 
 **建议**:
 - [可以继续] - 所有验证通过

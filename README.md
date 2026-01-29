@@ -263,19 +263,86 @@ end-to-end-delivery/
 - JavaScript/TypeScript: `javascript-typescript:javascript-testing-patterns`
 - Shell: `shell-scripting:bats-testing-patterns`
 
+#### 黑盒测试能力（v2.1 新增）
+
+验证阶段集成了黑盒测试能力，提供端到端的质量验证：
+
+**Phase 9: E2E 测试**
+
+**工具**: Playwright（推荐）
+**集成**: `everything-claude-code:e2e-runner`（可选）
+
+**能力**:
+- 基于 Discovery Story 自动生成 E2E 测试
+- 跨浏览器测试（Chromium, Firefox, WebKit）
+- Artifact 管理（截图、视频、trace）
+- Flaky test 管理
+
+**Phase 10: 集成测试**
+
+**工具**: Supertest, pytest, testing packages
+**覆盖范围**:
+- RESTful API 测试
+- 数据库集成测试
+- 第三方服务集成测试
+
+**Phase 11: 性能测试（DFX）**
+
+**工具**: k6（推荐）、JMeter
+**集成**: `performance-engineer`（可选）
+
+**测试类型**:
+- 响应时间测试（P50/P95/P99）
+- 并发用户测试
+- 负载测试
+- 资源监控
+
+**DFX 维度**:
+- 性能
+- 可靠性
+- 可扩展性
+- 可维护性
+- 安全性
+
+**执行模式**:
+- **快速模式**: 白盒测试（Phase 1-8）
+- **标准模式**: 白盒测试 + E2E 测试
+- **完整模式**: 白盒 + E2E + 集成 + 性能测试
+
 ### 5. Verification (质量验证)
 
-**目标**: 确保质量标准
+**目标**: 确保质量标准（白盒 + 黑盒测试）
 
 **输入**: 实施的代码
 **输出**: 验证报告
 
 **活动**:
-- 构建验证
-- 类型检查
-- 代码规范检查
-- 测试验证
-- 安全扫描
+- **白盒测试**（Phase 1-7）:
+  - 构建验证
+  - 类型检查
+  - 代码规范检查
+  - 单元测试验证
+  - 安全扫描
+  - 维度覆盖度验证
+  - 变更审查
+  - 测试质量验证
+
+- **黑盒测试**（Phase 9-11，可选）:
+  - **Phase 9: 用户场景测试（E2E）**
+    - 基于 Discovery User Story 验收标准
+    - 集成 Playwright
+    - 端到端用户旅程验证
+    - 跨浏览器兼容性测试
+  - **Phase 10: 功能集成测试**
+    - API 功能完整性测试
+    - 数据库集成测试
+    - 第三方服务集成测试
+  - **Phase 11: 性能测试（DFX）**
+    - 响应时间测试（P50/P95/P99）
+    - 并发用户测试
+    - 负载测试（k6/JMeter）
+    - 资源使用监控
+    - DFX 维度覆盖
 
 **命令**: `/verify`
 
@@ -283,11 +350,27 @@ end-to-end-delivery/
 
 **验证命令**:
 ```bash
+# 白盒测试
 npm run build
 npx tsc --noEmit
 npm run lint
 npm test -- --coverage
+
+# E2E 测试（可选）
+npx playwright test
+
+# 集成测试（可选）
+npm run test:integration
+
+# 性能测试（可选）
+k6 run k6/tests/load-test.js
 ```
+
+**可选验证标志**:
+- `--skip-e2e`: 跳过 E2E 测试
+- `--skip-integration`: 跳过集成测试
+- `--skip-performance`: 跳过性能测试
+- `--quick`: 快速验证模式（仅白盒测试）
 
 ### 6. Delivery (价值交付)
 
