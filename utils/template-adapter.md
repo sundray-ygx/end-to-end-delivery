@@ -2,7 +2,7 @@
 
 ## 概述
 
-模板适配器提供统一的模板调用接口，封装复杂度评估、模板选择、模板加载等功能，为各代理提供简单易用的模板服务。
+模板适配器提供统一的模板维度提取接口，封装复杂度评估、模板选择、维度加载等功能，为各代理提供简单易用的模板维度服务。
 
 ## 核心功能
 
@@ -10,9 +10,9 @@
 
 根据复杂度自动选择合适的开发模式和模板。
 
-### 2. 模板加载与渲染
+### 2. 模板维度提取
 
-封装模板加载和变量替换逻辑。
+封装模板加载和维度提取逻辑。
 
 ### 3. 缓存管理
 
@@ -84,13 +84,13 @@ async function getDesignTemplate(complexity) {
 
 ### 3. getCodingChecklist(language)
 
-获取编码 checklist。
+获取编码 checklist 并提取审查维度。
 
 ```javascript
 /**
- * 获取编码 checklist
+ * 获取编码 checklist 并提取审查维度
  * @param {string} language - 编程语言
- * @returns {string} Checklist 模板路径
+ * @returns {Object} 包含 checklist 路径和审查维度的对象
  */
 async function getCodingChecklist(language) {
   const checklistMap = {
@@ -101,27 +101,104 @@ async function getCodingChecklist(language) {
     // ... 其他语言
   };
 
-  return checklistMap[language] || 'coding/coding-checklist-generic.md';
+  const checklistPath = checklistMap[language] || 'coding/coding-checklist-generic.md';
+
+  // 加载 checklist 并提取审查维度
+  const dimensions = await extractChecklistDimensions(checklistPath);
+
+  return {
+    path: checklistPath,
+    dimensions: dimensions,
+  };
 }
 ```
 
-### 4. renderTemplate(templatePath, variables)
+### 4. getTestingChecklist(language)
 
-渲染模板。
+获取测试 checklist 并提取审查维度。
 
 ```javascript
 /**
- * 渲染模板
+ * 获取测试 checklist 并提取审查维度
+ * @param {string} language - 编程语言
+ * @returns {Object} 包含 checklist 路径、审查维度和 Skill 映射的对象
+ */
+async function getTestingChecklist(language) {
+  const checklistMap = {
+    python: 'testing/testing-checklist-python.md',
+    javascript: 'testing/testing-checklist-js.md',
+    typescript: 'testing/testing-checklist-js.md',
+    go: 'testing/testing-checklist-go.md',
+    java: 'testing/testing-checklist-java.md',
+    rust: 'testing/testing-checklist-rust.md',
+    c: 'testing/testing-checklist-c-cpp.md',
+    cpp: 'testing/testing-checklist-c-cpp.md',
+    shell: 'testing/testing-checklist-shell.md',
+  };
+
+  const checklistPath = checklistMap[language] || 'testing/testing-checklist-generic.md';
+
+  // 加载 checklist 并提取审查维度
+  const dimensions = await extractChecklistDimensions(checklistPath);
+
+  // Skill 映射（立即集成）
+  const skillMapping = {
+    python: 'python-development:python-testing-patterns',
+    javascript: 'javascript-typescript:javascript-testing-patterns',
+    typescript: 'javascript-typescript:javascript-testing-patterns',
+    shell: 'shell-scripting:bats-testing-patterns',
+    // 其他语言暂无对应 skill，使用 checklist
+  };
+
+  return {
+    path: checklistPath,
+    dimensions: dimensions,
+    skill: skillMapping[language] || null,
+  };
+}
+```
+
+### 5. renderTemplate(templatePath, variables)
+
+渲染模板（已弃用，保留用于向后兼容）。
+
+**注意**: 新的实现应使用 extractTemplateDimensions() 提取分析维度。
+
+```javascript
+/**
+ * 渲染模板（已弃用）
  * @param {string} templatePath - 模板路径
  * @param {Object} variables - 模板变量
  * @returns {Promise<string>} 渲染后的内容
+ * @deprecated 请使用 extractTemplateDimensions() 提取分析维度
  */
 async function renderTemplate(templatePath, variables) {
   return await loadTemplate(templatePath, variables);
 }
 ```
 
-### 5. evaluateComplexity(requirements)
+### 6. extractTemplateDimensions(templatePath)
+
+提取模板的分析维度。
+
+```javascript
+/**
+ * 提取模板的分析维度
+ * @param {string} templatePath - 模板路径
+ * @returns {Promise<Object>} 提取的分析维度
+ */
+async function extractTemplateDimensions(templatePath) {
+  // 读取模板文件
+  const templateContent = await fs.readFile(templatePath, 'utf-8');
+
+  // 提取分析维度
+  const dimensions = parseTemplateDimensions(templateContent);
+
+  return dimensions;
+}
+```
+
+### 7. evaluateComplexity(requirements)
 
 评估需求复杂度。
 
@@ -144,7 +221,7 @@ async function evaluateComplexity(requirements) {
 }
 ```
 
-### 6. detectProjectLanguage(projectPath)
+### 8. detectProjectLanguage(projectPath)
 
 检测项目语言。
 
@@ -166,28 +243,24 @@ async function detectProjectLanguage(projectPath) {
 ```javascript
 // 在 Discovery Agent 中使用
 
-async function generateRequirementsDocument(requirements) {
+async function analyzeRequirements(requirements) {
   // 1. 评估复杂度
   const complexity = await templateAdapter.evaluateComplexity(requirements);
 
-  // 2. 获取需求模板
+  // 2. 获取需求模板并提取分析维度
   const templateInfo = await templateAdapter.getRequirementsTemplate(complexity.level);
 
-  // 3. 渲染模板
-  const documents = [];
+  // 3. 基于模板维度进行深度需求分析
+  const dimensions = [];
   for (const templatePath of templateInfo.templates) {
-    const content = await templateAdapter.renderTemplate(templatePath, {
-      projectName: requirements.projectName,
-      requirementDescription: requirements.description,
-      // ... 其他变量
-    });
-    documents.push(content);
+    const dimension = await templateAdapter.extractTemplateDimensions(templatePath);
+    dimensions.push(dimension);
   }
 
   return {
     mode: templateInfo.mode,
     complexity: complexity,
-    documents,
+    dimensions: dimensions,
   };
 }
 ```
@@ -197,30 +270,26 @@ async function generateRequirementsDocument(requirements) {
 ```javascript
 // 在 Design Agent 中使用
 
-async function generateDesignDocument(requirements, design) {
+async function analyzeDesign(requirements, design) {
   // 1. 获取复杂度（来自 Discovery Agent）
   const complexity = requirements.complexity;
 
-  // 2. 获取设计模板
+  // 2. 获取设计模板并提取分析维度
   const templateInfo = await templateAdapter.getDesignTemplate(complexity.level);
 
-  // 3. 渲染模板
-  const document = await templateAdapter.renderTemplate(templateInfo.template, {
-    moduleName: design.moduleName,
-    architecture: design.architecture,
-    // ... 其他变量
-  });
+  // 3. 基于模板维度进行深度架构设计分析
+  const dimensions = await templateAdapter.extractTemplateDimensions(templateInfo.template);
 
   // 4. 如果需要模块拆分
   if (templateInfo.needsModuleBreakdown) {
-    const modules = await generateModuleDesigns(design.modules);
+    const modules = await analyzeModuleDesigns(design.modules);
     return {
-      document,
+      dimensions,
       modules,
     };
   }
 
-  return { document };
+  return { dimensions };
 }
 ```
 
@@ -233,59 +302,89 @@ async function applyCodingStandards(projectPath) {
   // 1. 检测项目语言
   const language = await templateAdapter.detectProjectLanguage(projectPath);
 
-  // 2. 获取编码 checklist
-  const checklistPath = await templateAdapter.getCodingChecklist(language);
+  // 2. 获取编码 checklist 并提取审查维度
+  const checklistInfo = await templateAdapter.getCodingChecklist(language);
 
-  // 3. 加载 checklist
-  const checklist = await templateAdapter.renderTemplate(checklistPath, {});
-
-  // 4. 应用编码规范
-  await applyChecklist(projectPath, checklist, language);
+  // 3. 基于checklist维度进行深度代码审查
+  const reviewResults = await reviewCodeByDimensions(projectPath, checklistInfo.dimensions);
 
   return {
     language,
-    checklist,
+    dimensions: checklistInfo.dimensions,
+    reviewResults,
   };
 }
 ```
 
-### 示例 4: Verification Agent 使用
+### 示例 4: Implementation Agent 测试维度审查使用
+
+```javascript
+// 在 Implementation Agent 中进行测试维度审查
+
+async function applyTestingPatterns(projectPath) {
+  // 1. 检测项目语言
+  const language = await templateAdapter.detectProjectLanguage(projectPath);
+
+  // 2. 获取测试 checklist 并提取审查维度
+  const testingChecklist = await templateAdapter.getTestingChecklist(language);
+
+  // 3. 如果有对应的 Skill，调用获取最佳实践
+  let bestPractices = null;
+  if (testingChecklist.skill) {
+    bestPractices = await callSkill(testingChecklist.skill);
+  }
+
+  // 4. 基于测试维度进行深度测试审查
+  const testReviewResults = await reviewTestsByDimensions(
+    projectPath,
+    testingChecklist.dimensions,
+    bestPractices
+  );
+
+  return {
+    language,
+    dimensions: testingChecklist.dimensions,
+    skill: testingChecklist.skill,
+    bestPractices,
+    reviewResults: testReviewResults,
+  };
+}
+```
+
+### 示例 5: Verification Agent 使用
 
 ```javascript
 // 在 Verification Agent 中使用
 
-async function verifyDocumentFormat(document, expectedTemplate) {
-  // 1. 加载预期模板
-  const template = await loadTemplateFile(expectedTemplate);
+async function verifyDimensionCoverage(document, expectedTemplate) {
+  // 1. 加载预期模板并提取维度
+  const templateDimensions = await templateAdapter.extractTemplateDimensions(expectedTemplate);
 
-  // 2. 提取模板结构
-  const structure = extractTemplateStructure(template);
-
-  // 3. 验证文档结构
-  const result = verifyStructure(document, structure);
+  // 2. 验证文档维度覆盖度
+  const result = verifyDimensionCoverageInDocument(document, templateDimensions);
 
   return result;
 }
 ```
 
-### 示例 5: Delivery Agent 使用
+### 示例 6: Delivery Agent 使用
 
 ```javascript
 // 在 Delivery Agent 中使用
 
-async function generateDeliveryDocuments(deliveryInfo) {
-  // 1. 获取交付模板
-  const templatePath = 'templates/delivery/delivery-report.md';
+async function generateDeliverySummary(phaseAnalysis) {
+  // 1. 基于各阶段维度分析成果生成交付总结
+  const summary = {
+    discovery: phaseAnalysis.discovery.dimensions,
+    design: phaseAnalysis.design.dimensions,
+    implementation: phaseSearch.implementation.dimensions,
+    verification: phaseSearch.verification.dimensions,
+  };
 
-  // 2. 渲染模板
-  const document = await templateAdapter.renderTemplate(templatePath, {
-    projectName: deliveryInfo.projectName,
-    version: deliveryInfo.version,
-    changes: deliveryInfo.changes,
-    // ... 其他变量
-  });
+  // 2. 生成端到端价值交付总结报告
+  const report = generateEndToEndSummary(summary);
 
-  return document;
+  return report;
 }
 ```
 
@@ -415,11 +514,11 @@ async function loadTemplateWithCache(templatePath) {
 
 ## 工具集成
 
-使用模板适配器增强需求输出：
+使用模板适配器增强需求分析：
 
 1. **复杂度评估**: 调用 `evaluateComplexity()` 评估需求复杂度
 2. **模板选择**: 根据复杂度自动选择合适的模板
-3. **文档生成**: 使用 `renderTemplate()` 生成标准化文档
+3. **维度分析**: 使用 `extractTemplateDimensions()` 提取分析维度并进行深度分析
 ```
 
 ### Design Agent
@@ -429,11 +528,11 @@ async function loadTemplateWithCache(templatePath) {
 
 ## 工具集成
 
-使用模板适配器增强设计输出：
+使用模板适配器增强设计分析：
 
 1. **模板获取**: 调用 `getDesignTemplate()` 获取设计模板
-2. **文档渲染**: 使用 `renderTemplate()` 渲染设计文档
-3. **模块拆分**: 高复杂度时自动进行模块拆分
+2. **维度提取**: 使用 `extractTemplateDimensions()` 提取设计维度
+3. **维度分析**: 基于提取的维度进行深度架构设计分析
 ```
 
 ### Implementation Agent
@@ -443,11 +542,18 @@ async function loadTemplateWithCache(templatePath) {
 
 ## 工具集成
 
-使用模板适配器增强编码规范：
+使用模板适配器增强编码规范审查：
 
 1. **语言检测**: 调用 `detectProjectLanguage()` 检测项目语言
-2. **Checklist 加载**: 调用 `getCodingChecklist()` 获取编码规范
-3. **规范检查**: 在编码过程中检查清单项
+2. **Checklist 加载**: 调用 `getCodingChecklist()` 获取编码规范并提取审查维度
+3. **维度审查**: 基于checklist维度进行深度代码审查
+
+使用模板适配器增强测试维度审查：
+
+1. **语言检测**: 调用 `detectProjectLanguage()` 检测项目语言
+2. **测试 Checklist 加载**: 调用 `getTestingChecklist()` 获取测试规范并提取审查维度
+3. **Skill 集成**: 如果有对应的 testing-patterns skill，自动调用获取最佳实践
+4. **测试维度审查**: 基于测试checklist维度进行深度测试审查
 ```
 
 ### Verification Agent
@@ -457,11 +563,11 @@ async function loadTemplateWithCache(templatePath) {
 
 ## 工具集成
 
-使用模板适配器验证文档格式：
+使用模板适配器验证维度覆盖度：
 
-1. **模板验证**: 验证输出文档是否符合模板格式
-2. **结构检查**: 检查文档结构的完整性
-3. **格式报告**: 生成格式验证报告
+1. **模板验证**: 验证输出文档是否覆盖了模板提供的维度
+2. **维度检查**: 检查文档维度的完整性
+3. **覆盖度报告**: 生成维度覆盖度验证报告
 ```
 
 ### Delivery Agent
@@ -471,11 +577,11 @@ async function loadTemplateWithCache(templatePath) {
 
 ## 工具集成
 
-使用模板适配器生成标准化文档：
+使用模板适配器生成交付总结：
 
-1. **模板选择**: 根据交付类型选择合适的模板
-2. **文档生成**: 使用 `renderTemplate()` 生成标准化文档
-3. **格式验证**: 验证生成的文档格式
+1. **维度汇总**: 汇总各阶段的维度分析成果
+2. **价值总结**: 基于维度分析生成端到端价值交付总结
+3. **模式提取**: 提取符合企业标准的价值模式
 ```
 
 ## 最佳实践

@@ -6,12 +6,12 @@
 
 ### 🎉 本地模板融合
 
-支持与企业本地模板深度融合，根据需求复杂度自动选择合适的开发模式和文档模板：
+支持与企业本地模板深度融合，利用模板提供的分析维度和框架，增强AI分析的深度和完整性：
 
 - **智能复杂度评估** - 自动评估需求复杂度，选择瀑布流或敏捷模式
-- **标准化文档输出** - 生成符合企业标准的需求、设计、编码文档
-- **编码规范检查** - 自动检测编程语言，加载对应的编码 checklist
-- **完整格式验证** - 验证输出文档是否符合模板格式要求
+- **模板维度参考** - 本地模板提供分析框架和维度（如 INVEST 原则、架构设计方法）
+- **深度分析增强** - AI基于模板维度进行深度分析，而非简单填充模板
+- **编码规范检查** - 自动检测编程语言，加载对应的编码 checklist 进行审查
 
 ## 概述
 
@@ -107,8 +107,39 @@ end-to-end-delivery/
 │   └── evidence-first.md    # 证据优先规则
 ├── templates/               # 模板文件（v2.0 扩展）
 │   ├── requirements/        # 需求模板（瀑布流/敏捷）
+│   │   ├── waterfall/       # 瀑布流模式模板
+│   │   │   ├── user-requirements-spec-v2.2.md
+│   │   │   └── system-requirements-spec-v3.9.md
+│   │   └── agile/           # 敏捷模式模板
+│   │       ├── Epic.md
+│   │       ├── Feature.md
+│   │       ├── Story.md
+│   │       ├── Task.md
+│   │       ├── Tech.md
+│   │       └── requirement_split.md
 │   ├── design/              # 设计模板（总体/模块详细/模块微型）
-│   └── coding/              # 编码 checklist（多语言）
+│   │   ├── overall-design-spec-v4.1.md
+│   │   ├── module-detailed-design-spec-v3.6.md
+│   │   └── module-mini-design-spec-v1.4.md
+│   ├── coding/              # 编码 checklist（多语言，从 Excel 转换）
+│   │   ├── coding-checklist-main-menu.md
+│   │   ├── coding-checklist-introduction.md
+│   │   ├── coding-checklist-results.md
+│   │   ├── coding-checklist-c-cpp.md
+│   │   ├── coding-checklist-cpp.md
+│   │   ├── coding-checklist-c-api.md
+│   │   ├── coding-checklist-python.md
+│   │   ├── coding-checklist-go.md
+│   │   ├── coding-checklist-js.md
+│   │   ├── coding-checklist-php.md
+│   │   ├── coding-checklist-shell.md
+│   │   └── coding-checklist-other.md
+│   ├── documentation/       # 文档模板
+│   │   ├── pr-template.md
+│   │   └── release-notes-template.md
+│   ├── custom-workflow/     # 自定义工作流模板
+│   │   └── simple-workflow.md
+│   └── .backup/             # 模板备份目录
 └── README.md               # 本文件
 ```
 
@@ -172,22 +203,65 @@ end-to-end-delivery/
 
 ### 4. Implementation (实施执行)
 
-**目标**: 高质量实现功能
+**目标**: 高质量实现功能，确保代码覆盖率达标
 
 **输入**: 实施蓝图
-**输出**: 可工作的代码
-
-**活动**:
-- TDD 红绿重构循环
-- 两阶段审查 (规格 → 质量)
-- 自审与修复
-- 频繁提交
+**输出**: 可工作的代码 + 完整的测试套件
 
 **命令**: `/implement`
 
 **代理**: `implementation-agent`
 
+**核心活动**:
+
+1. **TDD红绿重构循环**
+   - **RED**: 基于测试checklist维度编写失败的测试
+     - 检测编程语言并加载对应的测试checklist
+     - 集成testing-patterns skill获取最佳实践
+     - 确保测试覆盖快乐路径、边界条件、错误场景
+   - **GREEN**: 实现最小代码让测试通过
+   - **REFACTOR**: 在测试保护下重构代码
+
+2. **覆盖率验证门禁（≥80%）** ← 新增强制门禁
+   - 运行覆盖率检查命令
+   - 验证语句、分支、函数覆盖率均 ≥ 80%
+   - 分析未覆盖代码并补充测试
+   - **不达标必须继续补充测试，直到满足标准**
+
+3. **两阶段审查**
+   - 编码规范审查（基于编码checklist维度）
+   - 测试质量审查（基于测试checklist维度）
+
 **TDD 流程**: RED → GREEN → REFACTOR
+
+**质量门禁**: 测试覆盖率 ≥ 80%（语句、分支、函数）
+
+#### 测试Checklist模板支持（v2.0 新增）
+
+实施阶段集成了9种编程语言的测试checklist模板，提供测试编写的审查维度框架：
+
+**支持的语言**：
+- Python - pytest、fixtures、参数化、异步测试
+- JavaScript/TypeScript - Jest、Vitest、Testing Library、React组件
+- Go - testing包、表格驱动、接口、并发
+- Java - JUnit、Mockito、参数化
+- Rust - 内置测试框架、属性测试
+- C/C++ - Google Test、Catch2
+- Shell - Bats、shunit2
+- 通用 - 语言无关的测试维度
+
+**核心测试维度**：
+1. 测试结构 - AAA模式、命名规范
+2. 测试覆盖 - 快乐路径、边界条件、错误场景
+3. 测试隔离 - 独立性、无共享状态
+4. 断言质量 - 完整性、准确性
+5. Mock隔离 - 外部依赖隔离
+6. 覆盖率 - 语句/分支/函数 ≥ 80%
+
+**自动集成Testing Patterns Skills**：
+- Python: `python-development:python-testing-patterns`
+- JavaScript/TypeScript: `javascript-typescript:javascript-testing-patterns`
+- Shell: `shell-scripting:bats-testing-patterns`
 
 ### 5. Verification (质量验证)
 
@@ -247,10 +321,17 @@ npm test -- --coverage
 - 命名清晰有意义
 
 ### 测试质量
-- 测试覆盖率 ≥ 80%
-- 快乐路径覆盖
-- 边界条件覆盖
-- 错误场景覆盖
+- **测试覆盖率 ≥ 80%**（语句、分支、函数）
+- **语句覆盖率 ≥ 80%**
+- **分支覆盖率 ≥ 80%**
+- **函数覆盖率 ≥ 80%**
+- 快乐路径覆盖完整
+- 边界条件覆盖充分
+- 错误场景覆盖全面
+- 测试结构清晰（遵循AAA模式）
+- 测试独立无依赖
+- 断言完整准确
+- 外部依赖正确隔离
 
 ### 安全质量
 - 无硬编码密钥
@@ -283,9 +364,9 @@ npm test -- --coverage
 ### 模板类型
 
 1. **工作流模板**: 定义流程执行方式
-2. **文档模板**: 定义各种文档格式
-3. **规范模板**: 定义代码规范
-4. **结构模板**: 定义项目结构
+2. **分析框架模板**: 提供各阶段的分析维度和思考方向
+3. **规范检查模板**: 提供编码规范的检查维度
+4. **文档参考模板**: 提供企业文档的结构参考（用于理解分析框架）
 
 ### 使用模板
 
@@ -299,64 +380,129 @@ npm test -- --coverage
 
 ## 本地模板融合 (v2.0)
 
-### 模板目录结构
+### 插件模板目录结构
 
 ```
-templates/
+{插件目录}/templates/
 ├── requirements/           # 需求治理模板
 │   ├── waterfall/         # 瀑布流模式（高复杂度）
-│   │   ├── user-requirements-spec-v2.2.md
-│   │   └── system-requirements-spec-v3.9.md
+│   │   ├── user-requirements-spec-v2.2.md   # 用户需求规格说明书
+│   │   └── system-requirements-spec-v3.9.md  # 系统需求规格说明书
 │   └── agile/             # 敏捷模式（低复杂度）
-│       ├── Epic.md
-│       ├── Feature.md
-│       ├── Story.md
-│       └── Task.md
+│       ├── Epic.md                     # 史诗模板
+│       ├── Feature.md                  # 特性模板
+│       ├── Story.md                    # 用户故事模板（INVEST 原则）
+│       ├── Task.md                     # 任务模板
+│       ├── Tech.md                     # 技术任务模板
+│       └── requirement_split.md        # 需求拆分模板
 ├── design/                # 方案设计模板
-│   ├── overall-design-spec-v4.1.md       # 总体设计
-│   ├── module-detailed-design-spec-v3.6.md  # 模块详细设计
-│   └── module-mini-design-spec-v1.4.md      # 模块微型设计
-└── coding/                # 编码checklist
-    ├── coding-checklist-python.md
-    ├── coding-checklist-go.md
-    ├── coding-checklist-js.md
-    └── ...
+│   ├── overall-design-spec-v4.1.md       # 总体设计规格说明书
+│   ├── module-detailed-design-spec-v3.6.md  # 模块详细设计规格说明书
+│   └── module-mini-design-spec-v1.4.md      # 模块微型设计规格说明书
+├── coding/                # 编码 checklist（从企业 Excel 转换）
+│   ├── coding-checklist-main-menu.md      # 主菜单导航
+│   ├── coding-checklist-introduction.md   # 引言
+│   ├── coding-checklist-results.md        # 检查结果页
+│   ├── coding-checklist-c-cpp.md          # C 语言编码规范（通用）
+│   ├── coding-checklist-cpp.md            # C++ 编码规范
+│   ├── coding-checklist-c-api.md          # C API 编码规范
+│   ├── coding-checklist-python.md         # Python 编码规范
+│   ├── coding-checklist-go.md             # Go 编码规范
+│   ├── coding-checklist-js.md             # JavaScript 编码规范
+│   ├── coding-checklist-php.md            # PHP 编码规范
+│   ├── coding-checklist-shell.md          # Shell 编码规范
+│   └── coding-checklist-other.md          # 其他语言编码规范
+├── documentation/         # 文档模板
+│   ├── pr-template.md                    # PR 描述模板
+│   └── release-notes-template.md         # 发布说明模板
+├── custom-workflow/       # 自定义工作流模板
+│   └── simple-workflow.md                # 简化工作流（适用于简单功能）
+└── .backup/               # 模板备份目录
 ```
 
 ### 复杂度评估与模式选择
 
-| 复杂度等级 | 总分 | 开发模式 | 需求模板 | 设计模板 |
-|-----------|------|---------|---------|---------|
-| **高复杂度** | ≥12 | 瀑布流 (Waterfall) | 用户需求 + 系统需求 | 总体设计 + 模块设计 |
-| **中复杂度** | 8-11 | 敏捷 (Agile) | Epic → Feature → Story | 模块详细设计 |
-| **低复杂度** | 0-7 | 敏捷 (Agile) | Epic → Feature → Story | 模块微型设计 |
+| 复杂度等级 | 总分 | 开发模式 | 分析框架来源 |
+|-----------|------|---------|-------------|
+| **高复杂度** | ≥12 | 瀑布流 (Waterfall) | 用户需求规格 + 系统需求规格模板的维度 |
+| **中复杂度** | 8-11 | 敏捷 (Agile) | Epic/Feature/Story 模板的 INVEST 维度 |
+| **低复杂度** | 0-7 | 敏捷 (Agile) | Story 模板的 INVEST 维度 |
 
 ### 各阶段模板融合
 
 #### Discovery 阶段
 - 自动评估需求复杂度
-- 根据复杂度选择瀑布流或敏捷模式
-- 生成符合模板格式的需求文档
+- 根据复杂度选择合适的分析框架（瀑布流/敏捷）
+- 基于模板提供的维度进行深度需求分析
+- 输出包含模板维度的需求分析报告
 
 #### Design 阶段
-- 高复杂度：输出总体设计文档 + 模块拆分
-- 中复杂度：输出模块详细设计文档
-- 低复杂度：输出模块微型设计文档
+- 高复杂度：参考总体设计模板的维度进行架构分析
+- 中复杂度：参考模块详细设计模板的维度进行分析
+- 低复杂度：参考模块微型设计模板的维度进行分析
+- 输出包含设计维度的深度分析报告
 
 #### Implementation 阶段
 - 自动检测项目编程语言
-- 加载对应的编码 checklist
-- 在编码过程中检查清单项
+- 加载对应的编码 checklist（从企业 Excel 转换）
+- 基于 checklist 维度进行代码审查
+- 输出基于检查维度的编码规范报告
 
 #### Verification 阶段
-- 验证需求文档是否符合模板格式
-- 验证设计文档是否符合模板格式
-- 生成格式验证报告
+- 验证分析是否覆盖了模板提供的所有维度
+- 检查分析深度是否达到模板要求
+- 生成维度覆盖度验证报告
 
 #### Delivery 阶段
-- 使用模板生成标准化交付文档
-- 符合企业文档标准
-- 支持多种交付文档类型
+- 总结各阶段基于模板维度的分析成果
+- 提取符合企业标准的价值模式
+- 生成端到端价值交付总结
+
+### 自定义工作流模板
+
+插件提供 `simple-workflow.md` 模板，适用于简单功能的快速开发：
+
+```
+适用于 3-5 小时可完成的功能
+├── Discovery (30 分钟)    → 需求摘要
+├── Design (30 分钟)       → 简要设计
+├── Implementation (2-4小时) → 代码 + 测试
+├── Verification (15 分钟)  → 验证报告
+└── Delivery (15 分钟)     → PR 描述
+```
+
+简化检查点：
+- [ ] 需求明确
+- [ ] 设计清晰
+- [ ] 测试通过
+- [ ] 覆盖率 ≥ 80%
+- [ ] PR 准备好
+
+### 敏捷需求模板详解
+
+#### Story（用户故事）模板
+- **交付周期**: 3~5 天
+- **遵循 INVEST 原则**:
+  - Independent（独立）
+  - Negotiable（可协商）
+  - Valuable（有价值）
+  - Estimable（可估算）
+  - Small（规模小且适中）
+  - Testable（可验证）
+- **用户故事格式**:
+  ```
+  作为 <用户角色>，
+  我想要 <完成 xxx 活动>，
+  以便于 <实现 xxx 价值>
+  ```
+- **包含**: 功能性验收条件、非功能性验收条件、依赖项、技术方案建议
+
+#### 其他敏捷模板
+- **Epic.md**: 史诗级别需求，包含业务目标、范围、依赖
+- **Feature.md**: 特性级别需求，从 Epic 拆分而来
+- **Task.md**: 具体工作项，从 Story 拆分而来
+- **Tech.md**: 技术任务模板，用于技术债、重构等工作
+- **requirement_split.md**: 需求拆分指南和方法
 
 ### 配置选项
 
@@ -400,16 +546,16 @@ templates/
 ### 使用示例
 
 ```bash
-# 自动模式（根据复杂度自动选择模板）
+# 自动模式（根据复杂度自动选择分析框架）
 /deliver "实现用户登录功能"
 
-# 指定瀑布流模式
+# 指定瀑布流分析模式
 /deliver "实现用户登录功能" --mode waterfall
 
-# 指定敏捷模式
+# 指定敏捷分析模式
 /deliver "实现用户登录功能" --mode agile
 
-# 禁用模板（使用原有智能输出）
+# 禁用模板融合（使用纯AI分析）
 /deliver "实现用户登录功能" --no-template
 ```
 
