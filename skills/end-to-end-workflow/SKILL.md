@@ -1,6 +1,6 @@
 ---
 name: end-to-end-workflow
-description: 端到端价值交付闭环工作流 - 整合需求发现、代码库探索、架构设计、实施执行、质量验证、价值交付的完整流程
+description: 端到端价值交付闭环工作流 - 整合需求发现、代码库探索、架构设计、实施执行、质量验证、价值交付的完整流程。v3.0 新增：diagnostic-pro 诊断系统、continuous-learning-v2 Instinct 学习、Python/Go/C/C++ 多语言支持、eval-harness 评估驱动、database-reviewer 数据库专家
 ---
 
 # 端到端价值交付闭环工作流
@@ -8,6 +8,14 @@ description: 端到端价值交付闭环工作流 - 整合需求发现、代码�
 ## 概述
 
 本技能整合了 superpowers、everything-claude-code、feature-dev 三大插件的精华，形成完整的端到端价值交付闭环。
+
+**v3.0 新增能力**:
+- **diagnostic-pro**: 整合三大插件优势的调试、诊断、修复系统
+- **continuous-learning-v2**: Instinct-based 学习系统，自动提取和演化知识
+- **多语言支持**: Python、Go、C/C++ 全栈开发模式
+- **eval-harness**: 评估驱动开发（EDD），在需求阶段定义评估标准
+- **database-reviewer**: PostgreSQL 数据库专家，优化查询性能
+- **iterative-retrieval**: 解决子代理上下文问题的渐进式检索模式
 
 **核心原则**: Evidence Before Claims, Quality First, Continuous Learning
 

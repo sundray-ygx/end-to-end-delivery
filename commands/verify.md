@@ -1,13 +1,32 @@
 ---
-description: 执行质量验证阶段 - 全面验证、生成报告、确保质量门禁通过
+description: 执行质量验证阶段 - 全面验证、生成报告、确保质量门禁通过（v3.0 集成 diagnostic-pro）
 argument-hint: (可选) 验证范围
 ---
 
-# /verify - 质量验证阶段
+# /verify - 质量验证阶段 v3.0
 
 执行端到端交付流程的第五阶段：质量验证。
 
 **前置条件**: 必须先完成 Implementation 阶段
+
+## v3.0 新特性
+
+### diagnostic-pro 诊断触发
+当验证失败时，自动触发诊断系统进行问题分析：
+
+**支持诊断类型**:
+- `--type build` - 构建错误诊断（增量式修复、最小化改动）
+- `--type runtime` - 运行时异常诊断（异常层次、错误处理）
+- `--type performance` - 性能问题诊断（Profiling、优化建议）
+- `--type security` - 安全问题诊断（SQL 注入、XSS、密钥泄露）
+- `--type database` - 数据库问题诊断（查询优化、死锁检测）
+
+**自动触发**:
+```bash
+# 验证失败时自动调用
+/verify
+# 检测到问题 → 自动触发 /diagnose --type [自动检测]
+```
 
 ## 使用方式
 

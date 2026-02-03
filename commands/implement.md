@@ -1,13 +1,26 @@
 ---
-description: 执行实施执行阶段 - 按照TDD原则实施、进行两阶段审查、自审与修复
+description: 执行实施执行阶段 - 按照TDD原则实施、进行两阶段审查、自审与修复（v3.0 支持多语言）
 argument-hint: (可选) 任务编号或范围
 ---
 
-# /implement - 实施执行阶段
+# /implement - 实施执行阶段 v3.0
 
 执行端到端交付流程的第四阶段：实施执行。
 
 **前置条件**: 必须先完成 Design 阶段
+
+## v3.0 新特性
+
+### 多语言支持
+完整的全栈开发模式支持：
+
+| 语言 | 编码规范 | 测试框架 |
+|------|----------|----------|
+| **Python** | python-patterns | pytest, factory_boy |
+| **Go** | golang-patterns | table-driven tests, testify |
+| **C/C++** | c-cpp-patterns | Google Test, Catch2 |
+
+插件会自动检测项目编程语言，并加载对应的编码规范和测试框架支持。
 
 ## 使用方式
 

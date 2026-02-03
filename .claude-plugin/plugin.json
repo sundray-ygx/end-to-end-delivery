@@ -1,6 +1,7 @@
 {
   "name": "end-to-end-delivery",
-  "description": "端到端价值交付闭环开发流程 - 整合superpowers、everything-claude-code、feature-dev三大插件优势",
+  "version": "3.0.0",
+  "description": "端到端价值交付闭环开发流程 v3.0 - 整合 superpowers、everything-claude-code、feature-dev 三大插件优势。新增：diagnostic-pro 诊断系统、continuous-learning-v2 Instinct 学习、Python/Go/C/C++ 多语言支持、eval-harness 评估驱动、database-reviewer 数据库专家",
   "author": {
     "name": "Claude Code User"
   },
@@ -11,12 +12,28 @@
     "agents",
     "skills",
     "commands",
-    "rules",
     "tdd",
     "code-review",
     "delivery",
-    "end-to-end"
+    "end-to-end",
+    "diagnostic",
+    "continuous-learning",
+    "python",
+    "golang",
+    "cpp",
+    "database"
   ],
   "commands": "./commands",
-  "skills": "./skills"
+  "skills": "./skills",
+  "agents": [
+    "./agents/database-reviewer.md",
+    "./agents/delivery-agent.md",
+    "./agents/design-agent.md",
+    "./agents/diagnostic-agent.md",
+    "./agents/discovery-agent.md",
+    "./agents/exploration-agent.md",
+    "./agents/implementation-agent.md",
+    "./agents/observer-agent.md",
+    "./agents/verification-agent.md"
+  ]
 }

@@ -1,13 +1,35 @@
 ---
-description: 执行价值交付阶段 - 生成交付文档、验证价值、提取模式、完成闭环
+description: 执行价值交付阶段 - 生成交付文档、验证价值、提取模式、完成闭环（v3.0 集成 continuous-learning-v2）
 argument-hint: (可选) 交付类型 (pr|release)
 ---
 
-# /delivery - 价值交付阶段
+# /delivery - 价值交付阶段 v3.0
 
 执行端到端交付流程的最后阶段：价值交付。
 
 **前置条件**: 必须先完成 Verification 阶段
+
+## v3.0 新特性
+
+### continuous-learning-v2 Instinct 学习
+自动提取和演化可复用知识：
+
+**Instincts（本能行为）**:
+- 原子行为模式，带置信度评分（0.3-0.9）
+- Observer Agent 通过 hooks 自动捕获会话数据
+
+**演化路径**:
+```
+Instincts → Skills → Commands → Agents
+   ↓          ↓          ↓          ↓
+原子行为    可复用技能   命令行工具  自主代理
+```
+
+**相关命令**:
+- `/instinct-status` - 查看 Instincts 状态
+- `/instinct-export` - 导出 Instincts
+- `/instinct-import` - 导入 Instincts
+- `/evolve` - 演化 Instincts 为 Skills/Commands/Agents
 
 ## 使用方式
 

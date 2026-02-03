@@ -1,11 +1,27 @@
 ---
-description: 启动端到端价值交付闭环流程 - 从需求发现到价值交付的完整工作流（自动使用插件默认模板）
+description: 启动端到端价值交付闭环流程 - 从需求发现到价值交付的完整工作流（v3.0 整合诊断、学习、多语言支持）
 argument-hint: 功能需求描述
 ---
 
-# /deliver - 端到端价值交付命令
+# /deliver - 端到端价值交付命令 v3.0
 
 启动完整的端到端价值交付闭环流程，整合需求发现、代码库探索、架构设计、实施执行、质量验证、价值交付的完整链路。
+
+## v3.0 新特性
+
+### 🎯 核心能力增强
+- **diagnostic-pro 诊断系统** - 整合三大插件优势的调试、诊断、修复能力
+- **continuous-learning-v2 Instinct 学习** - 自动提取和演化可复用知识
+
+### 🌐 多语言支持
+- **Python** - python-patterns, python-testing (pytest, factory_boy)
+- **Go** - golang-patterns, golang-testing (table-driven tests, testify)
+- **C/C++** - c-cpp-patterns, c-cpp-testing (Google Test, RAII, smart pointers)
+
+### 📊 专业能力
+- **eval-harness** - 需求阶段评估驱动开发（Capability/Regression Evals）
+- **database-reviewer** - PostgreSQL 数据库专家（查询优化、索引设计）
+- **iterative-retrieval** - 渐进式检索模式（解决子代理上下文问题）
 
 ## 自动化执行
 
@@ -110,13 +126,16 @@ argument-hint: 功能需求描述
 创建任务追踪...
 ```
 
-### Step 2: Discovery Phase（v2.0 增强流程）
+### Step 2: Discovery Phase（v3.0 增强流程）
 启动 `discovery-agent` 进行需求发现
 
 **v2.0 新增步骤**:
 1. 需求复杂度评估（功能、技术、规模、风险四个维度）
 2. 根据复杂度自动选择开发模式（瀑布流/敏捷）
 3. 基于模板维度进行深度需求分析
+
+**v3.0 新增步骤**:
+1. **eval-harness 评估驱动** - 在需求阶段定义评估标准（Capability Evals、Regression Evals）
 
 **检查点**:
 - [ ] 需求清晰明确
@@ -125,22 +144,31 @@ argument-hint: 功能需求描述
 - [ ] 风险已评估
 - [ ] 复杂度评估完成（v2.0）
 - [ ] 维度分析完成（v2.0）
+- [ ] 评估标准已定义（v3.0）
 
-### Step 3: Exploration Phase
+### Step 3: Exploration Phase（v3.0 增强流程）
 启动 `exploration-agent` 进行代码库探索
+
+**v3.0 新增步骤**:
+1. **iterative-retrieval 渐进式检索** - DISPATCH → EVALUATE → REFINE → LOOP（最多 3 次循环）
+2. 渐进式细化代码库理解，解决子代理上下文问题
 
 **检查点**:
 - [ ] 代码库结构已映射
 - [ ] 现有模式已识别
 - [ ] 关键文件已标注
 - [ ] 技术债务已记录
+- [ ] 渐进式检索完成（v3.0）
 
-### Step 4: Design Phase（v2.0 增强流程）
+### Step 4: Design Phase（v3.0 增强流程）
 启动 `design-agent` 进行架构设计
 
 **v2.0 新增步骤**:
 1. 根据需求复杂度选择设计分析框架（总体设计/模块详细设计/模块微型设计）
 2. 基于模板维度进行深度架构设计分析
+
+**v3.0 新增步骤**:
+1. **database-reviewer 数据库专家** - PostgreSQL 查询优化、模式设计、索引策略、RLS 设计
 
 **检查点**:
 - [ ] 3 个方案已生成
@@ -148,8 +176,9 @@ argument-hint: 功能需求描述
 - [ ] 推荐方案明确
 - [ ] 实施蓝图详细
 - [ ] 维度分析完成（v2.0）
+- [ ] 数据库设计已审查（v3.0）
 
-### Step 5: Implementation Phase（v2.0 增强流程）
+### Step 5: Implementation Phase（v3.0 增强流程）
 启动 `implementation-agent` 进行实施执行
 
 **v2.0 新增步骤**:
@@ -157,20 +186,29 @@ argument-hint: 功能需求描述
 2. 加载对应的编码 checklist，提取审查维度
 3. 基于checklist维度进行深度代码审查
 
+**v3.0 新增步骤**:
+1. **多语言支持** - Python/Go/C/C++ 全栈开发模式
+2. 对应的编码规范和测试框架支持
+
 **检查点**:
 - [ ] TDD 流程遵循
 - [ ] 测试覆盖率 ≥ 80%
 - [ ] 代码审查通过
 - [ ] 自审完成
 - [ ] 编码规范检查完成（v2.0）
+- [ ] 语言特定规范符合（v3.0）
 
-### Step 6: Verification Phase（v2.0 增强流程）
+### Step 6: Verification Phase（v3.0 增强流程）
 启动 `verification-agent` 进行质量验证
 
 **v2.0 新增步骤**:
 1. 验证需求分析维度覆盖度
 2. 验证设计分析维度覆盖度
 3. 生成维度覆盖度验证报告
+
+**v3.0 新增步骤**:
+1. **diagnostic-pro 诊断触发** - 验证失败时自动调用诊断系统
+2. 支持构建/运行时/性能/安全/数据库五类诊断
 
 **检查点**:
 - [ ] 构建成功
@@ -179,8 +217,9 @@ argument-hint: 功能需求描述
 - [ ] 测试全部通过
 - [ ] 安全扫描通过
 - [ ] 维度覆盖度验证完成（v2.0）
+- [ ] 诊断问题已解决（v3.0）
 
-### Step 7: Delivery Phase（v2.0 增强流程）
+### Step 7: Delivery Phase（v3.0 增强流程）
 启动 `delivery-agent` 进行价值交付
 
 **v2.0 新增步骤**:
@@ -188,12 +227,17 @@ argument-hint: 功能需求描述
 2. 生成端到端价值交付总结报告
 3. 提取符合企业标准的价值模式
 
+**v3.0 新增步骤**:
+1. **continuous-learning-v2 Instinct 学习** - 自动提取可复用知识
+2. Instincts → Skills/Commands/Agents 演化路径
+
 **检查点**:
 - [ ] 交付文档完整
 - [ ] 价值已验证
 - [ ] 模式已提取
 - [ ] 知识已沉淀
 - [ ] 维度覆盖度总结完成（v2.0）
+- [ ] Instincts 已提取（v3.0）
 
 ## 输出物
 
@@ -298,12 +342,20 @@ argument-hint: 功能需求描述
 
 ## 相关命令
 
+### 主流程命令
 - `/discovery` - 仅执行需求发现阶段
 - `/exploration` - 仅执行代码库探索阶段
 - `/design` - 仅执行架构设计阶段
 - `/implement` - 仅执行实施执行阶段
 - `/verify` - 仅执行质量验证阶段
 - `/delivery` - 仅执行价值交付阶段
+
+### v3.0 新增命令
+- `/diagnose` - 诊断命令（支持 build/runtime/performance/security/database）
+- `/instinct-export` - 导出 Instincts
+- `/instinct-import` - 导入 Instincts
+- `/instinct-status` - 查看 Instincts 状态
+- `/evolve` - 演化 Instincts 为 Skills/Commands/Agents
 
 ## 相关代理
 

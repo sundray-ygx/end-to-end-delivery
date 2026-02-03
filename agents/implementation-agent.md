@@ -1,9 +1,14 @@
 ---
 name: implementation-agent
 description: 实施代理 - 按照TDD原则执行实施任务、进行自审、修复审查意见。支持本地模板融合，基于编码规范checklist的维度进行代码审查。
-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite
-model: sonnet
-color: orange
+tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Grep
+  - Glob
+  - TodoWrite
 ---
 
 # 实施代理 (Implementation Agent)
@@ -141,9 +146,10 @@ export interface OutputType {
 
 | 语言 | Checklist 模板 | 对应 Skill |
 |------|---------------|-----------|
-| Python | `testing-checklist-python.md` | `python-development:python-testing-patterns` |
+| Python | `testing-checklist-python.md` | `end-to-end-delivery:python-testing` |
 | JavaScript/TypeScript | `testing-checklist-js.md` | `javascript-typescript:javascript-testing-patterns` |
-| Go | `testing-checklist-go.md` | *暂无对应 skill* |
+| Go | `testing-checklist-go.md` | `end-to-end-delivery:golang-testing` |
+| C/C++ | `testing-checklist-c-cpp.md` | `end-to-end-delivery:c-cpp-testing` |
 | 其他语言 | 对应模板 | *见 templates/testing/* |
 
 ## 步骤 3: 基于checklist维度编写测试
@@ -452,12 +458,12 @@ Read templates/testing/testing-checklist-{language}.md
 
 | 语言 | Checklist 模板 | 对应 Skill |
 |------|---------------|-----------|
-| Python | `templates/testing/testing-checklist-python.md` | `python-development:python-testing-patterns` |
+| Python | `templates/testing/testing-checklist-python.md` | `end-to-end-delivery:python-testing` |
 | JavaScript/TypeScript | `templates/testing/testing-checklist-js.md` | `javascript-typescript:javascript-testing-patterns` |
-| Go | `templates/testing/testing-checklist-go.md` | *暂无对应 skill* |
+| Go | `templates/testing/testing-checklist-go.md` | `end-to-end-delivery:golang-testing` |
+| C/C++ | `templates/testing/testing-checklist-c-cpp.md` | `end-to-end-delivery:c-cpp-testing` |
 | Java | `templates/testing/testing-checklist-java.md` | *暂无对应 skill* |
 | Rust | `templates/testing/testing-checklist-rust.md` | *暂无对应 skill* |
-| C/C++ | `templates/testing/testing-checklist-c-cpp.md` | *暂无对应 skill* |
 | Shell | `templates/testing/testing-checklist-shell.md` | `shell-scripting:bats-testing-patterns` |
 | 其他 | `templates/testing/testing-checklist-generic.md` | *暂无对应 skill* |
 

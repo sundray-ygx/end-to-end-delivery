@@ -1,13 +1,30 @@
 ---
-description: 执行代码库探索阶段 - 映射结构、识别模式、分析相关功能、标注关键文件
+description: 执行代码库探索阶段 - 映射结构、识别模式、分析相关功能、标注关键文件（v3.0 集成 iterative-retrieval）
 argument-hint: (可选) 探索范围
 ---
 
-# /exploration - 代码库探索阶段
+# /exploration - 代码库探索阶段 v3.0
 
 执行端到端交付流程的第二阶段：代码库探索。
 
 **前置条件**: 必须先完成 Discovery 阶段
+
+## v3.0 新特性
+
+### iterative-retrieval 渐进式检索模式
+解决子代理上下文限制问题，通过渐进式细化代码库理解：
+
+```
+DISPATCH → EVALUATE → REFINE → LOOP
+  ↓          ↓           ↓      ↑
+分发检索    评估结果    细化查询 最多3次循环
+```
+
+**工作流程**:
+1. **DISPATCH** - 根据需求分发初始检索任务
+2. **EVALUATE** - 评估检索结果是否充分
+3. **REFINE** - 细化检索查询，深入探索
+4. **LOOP** - 最多循环 3 次，渐进式理解代码库
 
 ## 使用方式
 
