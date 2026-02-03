@@ -21,7 +21,7 @@ description: 本地开发流程模板适配器 - 融合本地开发流程模板�
 ```
 
 插件实际安装位置：
-- **缓存目录**: `~/.claude/plugins/cache/local-plugins/end-to-end-delivery/1.0.0/templates/`
+- **缓存目录**: `~/.claude/plugins/cache/local-plugins/end-to-end-delivery/templates/`
 - **市场目录**: `~/.claude/plugins/marketplaces/end-to-end-delivery/templates/`
 
 ### 项目本地模板
@@ -76,7 +76,7 @@ AI基于这些维度进行深度分析，而非简单填充模板。
 插件启动时自动加载模板:
 
 1. **插件默认模板**
-   - 从插件安装目录加载 (`~/.claude/plugins/cache/local-plugins/end-to-end-delivery/1.0.0/templates/`)
+   - 从插件安装目录加载 (`~/.claude/plugins/cache/local-plugins/end-to-end-delivery/templates/`)
    - 作为后备模板
 
 2. **项目本地模板**

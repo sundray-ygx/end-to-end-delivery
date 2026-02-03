@@ -181,20 +181,53 @@ async function renderTemplate(templatePath, variables) {
 
 提取模板的分析维度。
 
+**重要**: 支持自动回退到插件默认模板，当本地模板不存在时自动使用插件内置模板。
+
 ```javascript
 /**
- * 提取模板的分析维度
- * @param {string} templatePath - 模板路径
+ * 提取模板的分析维度（支持自动回退到插件默认模板）
+ * @param {string} templatePath - 模板路径（相对路径）
  * @returns {Promise<Object>} 提取的分析维度
+ *
+ * 模板查找顺序：
+ * 1. 项目根目录/.claude/templates/{templatePath}
+ * 2. 项目根目录/templates/{templatePath}
+ * 3. 插件目录/templates/{templatePath}（默认回退）
  */
 async function extractTemplateDimensions(templatePath) {
-  // 读取模板文件
-  const templateContent = await fs.readFile(templatePath, 'utf-8');
+  // 使用 template-loader 的 loadTemplate 函数（支持回退）
+  const templateContent = await loadTemplateWithFallback(templatePath);
 
   // 提取分析维度
   const dimensions = parseTemplateDimensions(templateContent);
 
   return dimensions;
+}
+
+/**
+ * 加载模板（支持回退到插件默认模板）
+ * @param {string} templatePath - 模板相对路径
+ * @returns {Promise<string>} 模板内容
+ */
+async function loadTemplateWithFallback(templatePath) {
+  const searchPaths = [
+    path.join(process.cwd(), '.claude', 'templates', templatePath),
+    path.join(process.cwd(), 'templates', templatePath),
+    // 插件默认模板路径
+    path.join(PLUGIN_ROOT_DIR, 'templates', templatePath)
+  ];
+
+  for (const templateFile of searchPaths) {
+    try {
+      return await fs.readFile(templateFile, 'utf-8');
+    } catch (error) {
+      continue; // 继续尝试下一个路径
+    }
+  }
+
+  throw new TemplateAdapterError('TEMPLATE_NOT_FOUND',
+    `无法找到模板文件: ${templatePath}`,
+    { searchedPaths: searchPaths });
 }
 ```
 

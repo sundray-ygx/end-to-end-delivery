@@ -47,7 +47,7 @@ Discovery → Exploration → Design → Implementation → Verification → Del
 ### 1. 安装插件
 
 插件通过本地插件方式安装，实际运行位置：
-- **安装位置**: `~/.claude/plugins/cache/local-plugins/end-to-end-delivery/1.0.0/`
+- **安装位置**: `~/.claude/plugins/cache/local-plugins/end-to-end-delivery/`
 - **源位置**: `~/.claude/plugins/marketplaces/end-to-end-delivery/`
 
 ```bash
@@ -453,12 +453,37 @@ k6 run k6/tests/load-test.js
 
 ### 使用模板
 
+**重要**: 当项目没有配置本地模板时，插件会**自动使用内置的默认模板**。
+
+#### 模板查找顺序（自动回退）
+
+```
+1. 项目根目录/.claude/templates/{templatePath}  (用户自定义 - 最高优先级)
+2. 项目根目录/templates/{templatePath}         (项目模板)
+3. 插件目录/templates/{templatePath}            (插件默认 - 自动回退) ✅
+```
+
+#### 无需配置即可使用
+
 ```bash
-# 使用特定模板
+# 直接使用，插件会自动使用默认模板
+/deliver "实现用户登录功能"
+```
+
+**当本地没有模板时**，插件会自动使用：
+- `templates/requirements/agile/Story.md` - 需求分析模板
+- `templates/design/module-detailed-design-spec-v3.6.md` - 设计模板
+- `templates/coding/coding-checklist-{语言}.md` - 编码规范
+- `templates/testing/testing-checklist-{语言}.md` - 测试规范
+
+#### 使用自定义模板
+
+```bash
+# 使用特定模板（覆盖默认模板）
 /deliver "实现用户登录" --template custom-workflow.md
 
-# 使用项目模板
-/deliver "实现用户登录" --template .claude/templates/workflow.md
+# 使用项目模板（放在 .claude/templates/ 目录）
+/deliver "实现用户登录"
 ```
 
 ## 本地模板融合 (v2.0)

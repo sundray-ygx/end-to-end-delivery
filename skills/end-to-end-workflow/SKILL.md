@@ -419,7 +419,7 @@ grep -rn "sk-" --include="*.ts" . | head -10
 
 ### 本地模板融合
 
-插件支持融合本地的开发流程模板:
+插件支持融合本地的开发流程模板，并提供智能回退机制：
 
 ```bash
 # 模板位置
@@ -432,19 +432,44 @@ templates/custom-workflow/
 - testing-patterns/      # 测试模式模板
 ```
 
+### 模板查找顺序（自动回退）
+
+**重要**: 当本地没有配置模板时，插件会自动使用内置的默认模板。
+
+```
+1. 项目根目录/.claude/templates/{templatePath}  (用户自定义 - 最高优先级)
+2. 项目根目录/templates/{templatePath}         (项目模板)
+3. 插件目录/templates/{templatePath}            (插件默认 - 自动回退)
+```
+
 ### 模板使用
 
-1. **在项目根目录创建模板文件**
+1. **使用插件默认模板（推荐）**
 ```bash
-# 创建项目模板
-mkdir -p .claude/templates
-cp templates/custom-workflow/my-template.md .claude/templates/
+# 直接使用 /deliver 命令，插件会自动使用默认模板
+/deliver "实现用户登录功能"
 ```
 
-2. **在技能中引用模板**
-```markdown
-使用模板: `template-adapter` 技能会自动加载和适配本地模板
+2. **使用项目自定义模板**
+```bash
+# 在项目根目录创建模板目录
+mkdir -p .claude/templates
+
+# 复制并修改插件默认模板
+cp {插件目录}/templates/requirements/agile/Story.md .claude/templates/
+
+# 使用 /deliver 命令会自动优先使用项目模板
+/deliver "实现用户登录功能"
 ```
+
+### 模板覆盖策略
+
+| 情况 | 行为 |
+|------|------|
+| 无任何本地模板 | ✅ 使用插件默认模板 |
+| 有 .claude/templates/ | 优先使用，其次插件默认 |
+| 有项目 templates/ | 其次使用，最后插件默认 |
+| 模板文件缺失 | 自动回退到插件默认模板 |
 
 ---
 

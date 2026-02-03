@@ -103,19 +103,43 @@
 
 加载并渲染模板。
 
+**重要**: 此函数实现了模板回退机制，当本地模板不存在时自动使用插件默认模板。
+
 ```javascript
 /**
- * 加载并渲染模板
- * @param {string} templatePath - 模板文件路径
+ * 加载并渲染模板（支持自动回退到插件默认模板）
+ * @param {string} templatePath - 模板文件路径（相对路径）
  * @param {Object} variables - 模板变量
  * @returns {Promise<string>} 渲染后的内容
+ *
+ * 模板查找顺序：
+ * 1. 项目根目录/.claude/templates/{templatePath}
+ * 2. 项目根目录/templates/{templatePath}
+ * 3. 插件目录/templates/{templatePath}（默认回退）
  */
 async function loadTemplate(templatePath, variables) {
-  // 1. 读取模板文件
-  // 2. 替换变量
-  // 3. 处理条件渲染
-  // 4. 处理循环渲染
-  // 5. 返回渲染结果
+  const searchPaths = [
+    path.join(process.cwd(), '.claude', 'templates', templatePath),
+    path.join(process.cwd(), 'templates', templatePath),
+    // 插件默认模板路径（通过环境变量或配置获取）
+    path.join(PLUGIN_ROOT_DIR, 'templates', templatePath)
+  ];
+
+  // 依次尝试读取模板文件
+  for (const templateFile of searchPaths) {
+    try {
+      const content = await fs.readFile(templateFile, 'utf-8');
+      return renderTemplate(content, variables);
+    } catch (error) {
+      // 继续尝试下一个路径
+      continue;
+    }
+  }
+
+  // 所有路径都失败，抛出错误
+  throw new TemplateLoaderError('TEMPLATE_NOT_FOUND',
+    `无法找到模板文件: ${templatePath}`,
+    { searchedPaths: searchPaths });
 }
 ```
 
