@@ -6,6 +6,16 @@
 
 ### 🎉 新增核心能力
 
+#### ui-design（UI/UX设计能力闭环）
+整合三大UI插件优势的端到端UI/UX设计能力：
+
+- **设计系统生成**: 67种样式、96种调色板、57种字体搭配、25种图表
+- **高质量实现**: 独特美学方向、艺术性设计、避免通用AI美学
+- **规范验证**: Vercel Web Interface Guidelines审查、无障碍性检查
+- **13种技术栈支持**: HTML/Tailwind、React、Next.js、Vue、Svelte、SwiftUI、React Native、Flutter、shadcn/ui、Jetpack Compose等
+
+**命令**: `/ui-design`
+
 #### diagnostic-pro（诊断专家）
 整合三大插件优势的调试、诊断、修复系统，提供系统化的诊断能力：
 
@@ -104,6 +114,12 @@ Discovery → Exploration → Design → Implementation → Verification → Del
 ## 新增命令（v3.0）
 
 ```bash
+# UI/UX设计命令（新增）
+/ui-design "SaaS analytics dashboard" --project-name "DataViz Pro"
+/ui-design review src/components/Header.tsx
+/ui-design check --web-guidelines src/
+/ui-design search "glassmorphism dark" --domain style
+
 # 诊断命令
 /diagnose "错误描述"
 /diagnose --type build "构建失败"
@@ -152,6 +168,22 @@ end-to-end-delivery/
 │   ├── observer-agent.md    # [新增] 持续学习观察者
 │   └── database-reviewer.md # [新增] 数据库专家代理
 ├── skills/                  # 技能定义
+│   ├── ui-design/           # [新增] UI/UX设计能力闭环
+│   │   ├── SKILL.md         # 技能主文档
+│   │   ├── DESIGN_SYSTEM.md # 设计系统生成指南
+│   │   ├── GUIDELINES.md    # UI指南
+│   │   ├── IMPLEMENTATION.md # 实现指南
+│   │   ├── CHECKLIST.md     # 检查清单
+│   │   ├── scripts/         # Python脚本
+│   │   │   ├── core.py      # 核心功能
+│   │   │   ├── design_system.py # 设计系统生成器
+│   │   │   └── search.py    # 域搜索
+│   │   └── data/            # 设计数据
+│   │       ├── styles.csv   # 67种样式
+│   │       ├── colors.csv   # 96种调色板
+│   │       ├── typography.csv # 57种字体搭配
+│   │       ├── charts.csv   # 25种图表
+│   │       └── stacks/      # 13种技术栈配置
 │   ├── end-to-end-workflow/ # 端到端工作流主技能（v3.0 更新）
 │   ├── template-adapter/    # 模板适配器技能
 │   ├── diagnostic-pro/      # [新增] 诊断专家技能
@@ -174,6 +206,7 @@ end-to-end-delivery/
 │   ├── c-cpp-patterns/      # [新增] C/C++ 模式
 │   └── c-cpp-testing/       # [新增] C/C++ 测试
 ├── commands/                # 命令定义
+│   ├── ui-design.md         # [新增] /ui-design 命令
 │   ├── deliver.md           # /deliver 命令（完整流程）
 │   ├── discovery.md         # /discovery 命令（需求发现阶段）
 │   ├── exploration.md       # /exploration 命令（代码库探索阶段）
@@ -277,6 +310,7 @@ cp -r ~/.claude/plugins/marketplaces/end-to-end-delivery ~/.claude/plugins/
 {
   "permissions": {
     "allow": [
+      "Skill(end-to-end-delivery:ui-design)",
       "Skill(end-to-end-delivery:diagnostic-pro)",
       "Skill(end-to-end-delivery:continuous-learning-v2)",
       "Skill(end-to-end-delivery:eval-harness)",
@@ -317,6 +351,11 @@ cp -r ~/.claude/plugins/marketplaces/end-to-end-delivery ~/.claude/plugins/
 ## 与其他插件的关系
 
 本插件整合了以下插件的精华:
+
+### UI/UX Design
+- Design System Generator（67种样式、96种调色板、57种字体搭配）
+- Frontend Design（高质量美学实现）
+- Web Design Guidelines（Vercel规范验证）
 
 ### Superpowers
 - Subagent-Driven Development
