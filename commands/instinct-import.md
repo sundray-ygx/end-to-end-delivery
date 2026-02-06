@@ -3,7 +3,7 @@ description: 从文件导入 Instincts（v3.0 continuous-learning-v2）
 argument-hint: 导入文件路径
 ---
 
-# Instinct Import Command
+# /instinct-import - Instinct 导入命令 v3.0
 
 从文件导入 instincts。
 

@@ -1,5 +1,4 @@
 # Claude Code specific
-.claude/
 settings.local.json
 mcp.json
 
@@ -37,3 +36,4 @@ GITHUB_SETUP_GUIDE.md
 OPTIMIZATION_PLAN.md
 OPTIMIZATION_PLAN_V2.md
 .specify/
+.claude/

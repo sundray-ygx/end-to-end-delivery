@@ -3,7 +3,7 @@ description: 演化 Instincts 为 Skills/Commands/Agents（v3.0 continuous-learn
 argument-hint: (可选) 演化选项
 ---
 
-# Evolve Command
+# /evolve - Instinct 演化命令 v3.0
 
 演化 instincts 为更高层次的结构（skills/commands/agents）。
 
@@ -19,9 +19,9 @@ argument-hint: (可选) 演化选项
 ## 功能
 
 分析 instincts 并将相关的聚类为：
-- **Commands**: 用户会显式请求的操作
-- **Skills**: 自动触发行为
-- **Agents**: 复杂的多步骤流程
+- **Commands**：用户会显式请求的操作
+- **Skills**：自动触发行为
+- **Agents**：复杂的多步骤流程
 
 ## 演化规则
 

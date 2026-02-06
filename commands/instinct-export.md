@@ -3,7 +3,7 @@ description: 导出 Instincts 到文件，用于分享或备份（v3.0 continuou
 argument-hint: (可选) 导出选项
 ---
 
-# Instinct Export Command
+# /instinct-export - Instinct 导出命令 v3.0
 
 导出 instincts 到文件，用于分享或备份。
 

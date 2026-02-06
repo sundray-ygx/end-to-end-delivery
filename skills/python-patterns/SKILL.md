@@ -1,43 +1,43 @@
 ---
 name: python-patterns
-description: Pythonic idioms, PEP 8 standards, type hints, and best practices for building robust, efficient, and maintainable Python applications.
+description: Python 开发模式 - Pythonic 惯用法、PEP 8 标准、类型提示和构建健壮高效可维护 Python 应用程序的最佳实践。
 ---
 
-# Python Development Patterns
+# Python 开发模式
 
-Idiomatic Python patterns and best practices for building robust, efficient, and maintainable applications.
+构建健壮、高效、可维护应用程序的 Pythonic 惯用法和最佳实践。
 
-## When to Activate
+## 何时激活
 
-- Writing new Python code
-- Reviewing Python code
-- Refactoring existing Python code
-- Designing Python packages/modules
+- 编写新的 Python 代码
+- 审查 Python 代码
+- 重构现有 Python 代码
+- 设计 Python 包/模块
 
-## Core Principles
+## 核心原则
 
-### 1. Readability Counts
+### 1. 可读性优先
 
-Python prioritizes readability. Code should be obvious and easy to understand.
+Python 优先考虑可读性。代码应该显而易见且易于理解。
 
 ```python
-# Good: Clear and readable
+# 好的实践：清晰可读
 def get_active_users(users: list[User]) -> list[User]:
-    """Return only active users from the provided list."""
+    """从提供的列表中仅返回活跃用户。"""
     return [user for user in users if user.is_active]
 
 
-# Bad: Clever but confusing
+# 不好的实践：聪明但令人困惑
 def get_active_users(u):
     return [x for x in u if x.a]
 ```
 
-### 2. Explicit is Better Than Implicit
+### 2. 显式优于隐式
 
-Avoid magic; be clear about what your code does.
+避免魔法；明确代码的功能。
 
 ```python
-# Good: Explicit configuration
+# 好的实践：显式配置
 import logging
 
 logging.basicConfig(
@@ -45,24 +45,24 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
-# Bad: Hidden side effects
+# 不好的实践：隐藏的副作用
 import some_module
-some_module.setup()  # What does this do?
+some_module.setup()  # 这做了什么？
 ```
 
-### 3. EAFP - Easier to Ask Forgiveness Than Permission
+### 3. EAFP - 请求原谅比许可更容易
 
-Python prefers exception handling over checking conditions.
+Python 优先使用异常处理而非条件检查。
 
 ```python
-# Good: EAFP style
+# 好的实践：EAFP 风格
 def get_value(dictionary: dict, key: str) -> Any:
     try:
         return dictionary[key]
     except KeyError:
         return default_value
 
-# Bad: LBYL (Look Before You Leap) style
+# 不好的实践：LBYL (Look Before You Leap) 风格
 def get_value(dictionary: dict, key: str) -> Any:
     if key in dictionary:
         return dictionary[key]
@@ -70,9 +70,9 @@ def get_value(dictionary: dict, key: str) -> Any:
         return default_value
 ```
 
-## Type Hints
+## 类型提示
 
-### Basic Type Annotations
+### 基本类型注解
 
 ```python
 from typing import Optional, List, Dict, Any
@@ -82,322 +82,178 @@ def process_user(
     data: Dict[str, Any],
     active: bool = True
 ) -> Optional[User]:
-    """Process a user and return the updated User or None."""
+    """处理用户并返回更新后的 User 或 None。"""
     if not active:
         return None
     return User(user_id, data)
 ```
 
-### Modern Type Hints (Python 3.9+)
+### 现代类型提示 (Python 3.9+)
 
 ```python
-# Python 3.9+ - Use built-in types
+# Python 3.9+ - 使用内置类型
 def process_items(items: list[str]) -> dict[str, int]:
     return {item: len(item) for item in items}
 
-# Python 3.8 and earlier - Use typing module
+# Python 3.8 及更早版本 - 使用 typing 模块
 from typing import List, Dict
 
 def process_items(items: List[str]) -> Dict[str, int]:
     return {item: len(item) for item in items}
 ```
 
-### Type Aliases and TypeVar
+### 泛型
 
 ```python
-from typing import TypeVar, Union
+from typing import TypeVar, Generic
 
-# Type alias for complex types
-JSON = Union[dict[str, Any], list[Any], str, int, float, bool, None]
-
-def parse_json(data: str) -> JSON:
-    return json.loads(data)
-
-# Generic types
 T = TypeVar('T')
 
-def first(items: list[T]) -> T | None:
-    """Return the first item or None if list is empty."""
-    return items[0] if items else None
+class Stack(Generic[T]):
+    def __init__(self) -> None:
+        self.items: list[T] = []
+
+    def push(self, item: T) -> None:
+        self.items.append(item)
+
+    def pop(self) -> T:
+        return self.items.pop()
+
+# 使用
+stack: Stack[int] = Stack()
+stack.push(1)
 ```
 
-### Protocol-Based Duck Typing
+### Protocol（结构子类型）
 
 ```python
 from typing import Protocol
 
-class Renderable(Protocol):
-    def render(self) -> str:
-        """Render the object to a string."""
+class Drawable(Protocol):
+    def draw(self) -> None: ...
 
-def render_all(items: list[Renderable]) -> str:
-    """Render all items that implement the Renderable protocol."""
-    return "\n".join(item.render() for item in items)
+class Circle:
+    def draw(self) -> None:
+        print("Drawing circle")
+
+class Square:
+    def draw(self) -> None:
+        print("Drawing square")
+
+def render(shape: Drawable) -> None:
+    shape.draw()
+
+render(Circle())  # 类型检查通过
+render(Square())  # 类型检查通过
 ```
 
-## Error Handling Patterns
+## Pythonic 惯用法
 
-### Specific Exception Handling
+### 列表推导
 
 ```python
-# Good: Catch specific exceptions
-def load_config(path: str) -> Config:
-    try:
-        with open(path) as f:
-            return Config.from_json(f.read())
-    except FileNotFoundError as e:
-        raise ConfigError(f"Config file not found: {path}") from e
-    except json.JSONDecodeError as e:
-        raise ConfigError(f"Invalid JSON in config: {path}") from e
+# 好的实践：列表推导
+squares = [x**2 for x in range(10)]
+even_squares = [x**2 for x in range(10) if x % 2 == 0]
 
-# Bad: Bare except
-def load_config(path: str) -> Config:
-    try:
-        with open(path) as f:
-            return Config.from_json(f.read())
-    except:
-        return None  # Silent failure!
+# 不好：使用循环
+squares = []
+for x in range(10):
+    squares.append(x**2)
 ```
 
-### Exception Chaining
+### 字典和集合推导
 
 ```python
-def process_data(data: str) -> Result:
-    try:
-        parsed = json.loads(data)
-    except json.JSONDecodeError as e:
-        # Chain exceptions to preserve the traceback
-        raise ValueError(f"Failed to parse data: {data}") from e
+# 字典推导
+word_lengths = {word: len(word) for word in ["hello", "world"]}
+
+# 集合推导
+unique_lengths = {len(word) for word in ["hello", "world", "hi"]}
 ```
 
-### Custom Exception Hierarchy
+### 上下文管理器
 
 ```python
-class AppError(Exception):
-    """Base exception for all application errors."""
-    pass
+# 好的实践：使用 with 语句
+with open("file.txt", "r") as f:
+    content = f.read()
+# 文件自动关闭
 
-class ValidationError(AppError):
-    """Raised when input validation fails."""
-    pass
-
-class NotFoundError(AppError):
-    """Raised when a requested resource is not found."""
-    pass
-
-# Usage
-def get_user(user_id: str) -> User:
-    user = db.find_user(user_id)
-    if not user:
-        raise NotFoundError(f"User not found: {user_id}")
-    return user
+# 不好：手动管理
+f = open("file.txt", "r")
+content = f.read()
+f.close()  # 如果抛出异常可能不会执行
 ```
 
-## Context Managers
-
-### Resource Management
+### 枚举
 
 ```python
-# Good: Using context managers
-def process_file(path: str) -> str:
-    with open(path, 'r') as f:
-        return f.read()
+# 好的实践：使用 enumerate
+for i, item in enumerate(items):
+    print(f"Index {i}: {item}")
 
-# Bad: Manual resource management
-def process_file(path: str) -> str:
-    f = open(path, 'r')
-    try:
-        return f.read()
-    finally:
-        f.close()
+# 不好：手动索引
+for i in range(len(items)):
+    print(f"Index {i}: {items[i]}")
 ```
 
-### Custom Context Managers
+### Zip
 
 ```python
-from contextlib import contextmanager
+# 好的实践：使用 zip
+names = ["Alice", "Bob"]
+ages = [25, 30]
 
-@contextmanager
-def timer(name: str):
-    """Context manager to time a block of code."""
-    start = time.perf_counter()
-    yield
-    elapsed = time.perf_counter() - start
-    print(f"{name} took {elapsed:.4f} seconds")
+for name, age in zip(names, ages):
+    print(f"{name} is {age} years old")
 
-# Usage
-with timer("data processing"):
-    process_large_dataset()
+# 不好：手动索引
+for i in range(len(names)):
+    print(f"{names[i]} is {ages[i]} years old")
 ```
 
-### Context Manager Classes
+### 生成器表达式
 
 ```python
-class DatabaseTransaction:
-    def __init__(self, connection):
-        self.connection = connection
+# 好的实践：生成器表达式（内存高效）
+sum_of_squares = sum(x**2 for x in range(1000000))
 
-    def __enter__(self):
-        self.connection.begin_transaction()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is None:
-            self.connection.commit()
-        else:
-            self.connection.rollback()
-        return False  # Don't suppress exceptions
-
-# Usage
-with DatabaseTransaction(conn):
-    user = conn.create_user(user_data)
-    conn.create_profile(user.id, profile_data)
+# 不好：列表推导（创建临时列表）
+sum_of_squares = sum([x**2 for x in range(1000000)])
 ```
 
-## Comprehensions and Generators
+## 装饰器
 
-### List Comprehensions
-
-```python
-# Good: List comprehension for simple transformations
-names = [user.name for user in users if user.is_active]
-
-# Bad: Manual loop
-names = []
-for user in users:
-    if user.is_active:
-        names.append(user.name)
-
-# Complex comprehensions should be expanded
-# Bad: Too complex
-result = [x * 2 for x in items if x > 0 if x % 2 == 0]
-
-# Good: Use a generator function
-def filter_and_transform(items: Iterable[int]) -> list[int]:
-    result = []
-    for x in items:
-        if x > 0 and x % 2 == 0:
-            result.append(x * 2)
-    return result
-```
-
-### Generator Expressions
-
-```python
-# Good: Generator for lazy evaluation
-total = sum(x * x for x in range(1_000_000))
-
-# Bad: Creates large intermediate list
-total = sum([x * x for x in range(1_000_000)])
-```
-
-### Generator Functions
-
-```python
-def read_large_file(path: str) -> Iterator[str]:
-    """Read a large file line by line."""
-    with open(path) as f:
-        for line in f:
-            yield line.strip()
-
-# Usage
-for line in read_large_file("huge.txt"):
-    process(line)
-```
-
-## Data Classes and Named Tuples
-
-### Data Classes
-
-```python
-from dataclasses import dataclass, field
-from datetime import datetime
-
-@dataclass
-class User:
-    """User entity with automatic __init__, __repr__, and __eq__."""
-    id: str
-    name: str
-    email: str
-    created_at: datetime = field(default_factory=datetime.now)
-    is_active: bool = True
-
-# Usage
-user = User(
-    id="123",
-    name="Alice",
-    email="alice@example.com"
-)
-```
-
-### Data Classes with Validation
-
-```python
-@dataclass
-class User:
-    email: str
-    age: int
-
-    def __post_init__(self):
-        # Validate email format
-        if "@" not in self.email:
-            raise ValueError(f"Invalid email: {self.email}")
-        # Validate age range
-        if self.age < 0 or self.age > 150:
-            raise ValueError(f"Invalid age: {self.age}")
-```
-
-### Named Tuples
-
-```python
-from typing import NamedTuple
-
-class Point(NamedTuple):
-    """Immutable 2D point."""
-    x: float
-    y: float
-
-    def distance(self, other: 'Point') -> float:
-        return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** 0.5
-
-# Usage
-p1 = Point(0, 0)
-p2 = Point(3, 4)
-print(p1.distance(p2))  # 5.0
-```
-
-## Decorators
-
-### Function Decorators
+### 基本装饰器
 
 ```python
 import functools
 import time
 
-def timer(func: Callable) -> Callable:
-    """Decorator to time function execution."""
+def timer(func):
+    """测量函数执行时间的装饰器。"""
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         start = time.perf_counter()
         result = func(*args, **kwargs)
-        elapsed = time.perf_counter() - start
-        print(f"{func.__name__} took {elapsed:.4f}s")
+        end = time.perf_counter()
+        print(f"{func.__name__} took {end - start:.4f} seconds")
         return result
     return wrapper
 
 @timer
 def slow_function():
     time.sleep(1)
-
-# slow_function() prints: slow_function took 1.0012s
+    return "Done"
 ```
 
-### Parameterized Decorators
+### 带参数的装饰器
 
 ```python
 def repeat(times: int):
-    """Decorator to repeat a function multiple times."""
-    def decorator(func: Callable) -> Callable:
+    """重复执行函数指定次数的装饰器。"""
+    def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             results = []
@@ -407,22 +263,22 @@ def repeat(times: int):
         return wrapper
     return decorator
 
-@repeat(times=3)
+@repeat(3)
 def greet(name: str) -> str:
     return f"Hello, {name}!"
 
-# greet("Alice") returns ["Hello, Alice!", "Hello, Alice!", "Hello, Alice!"]
+# greet("Alice") 返回 ["Hello, Alice!", "Hello, Alice!", "Hello, Alice!"]
 ```
 
-### Class-Based Decorators
+### 类装饰器
 
 ```python
 class CountCalls:
-    """Decorator that counts how many times a function is called."""
-    def __init__(self, func: Callable):
-        functools.update_wrapper(self, func)
+    """统计函数调用次数的类装饰器。"""
+    def __init__(self, func):
         self.func = func
         self.count = 0
+        functools.update_wrapper(self, func)
 
     def __call__(self, *args, **kwargs):
         self.count += 1
@@ -430,320 +286,401 @@ class CountCalls:
         return self.func(*args, **kwargs)
 
 @CountCalls
-def process():
+def say_hello():
+    print("Hello!")
+```
+
+## 错误处理
+
+### 异常层次结构
+
+```python
+class ApplicationError(Exception):
+    """应用程序错误基类。"""
     pass
 
-# Each call to process() prints the call count
+class ValidationError(ApplicationError):
+    """验证失败时引发。"""
+    pass
+
+class NotFoundError(ApplicationError):
+    """资源未找到时引发。"""
+    pass
+
+# 使用
+def get_user(user_id: str) -> User:
+    if not user_id:
+        raise ValidationError("user_id cannot be empty")
+
+    user = database.find(user_id)
+    if not user:
+        raise NotFoundError(f"User {user_id} not found")
+
+    return user
 ```
 
-## Concurrency Patterns
-
-### Threading for I/O-Bound Tasks
+### 上下文中的异常处理
 
 ```python
-import concurrent.futures
-import threading
+# 使用 finally 确保清理
+def process_file(filename: str):
+    f = None
+    try:
+        f = open(filename, "r")
+        # 处理文件
+    except IOError as e:
+        print(f"Error reading file: {e}")
+        raise
+    finally:
+        if f:
+            f.close()
 
-def fetch_url(url: str) -> str:
-    """Fetch a URL (I/O-bound operation)."""
-    import urllib.request
-    with urllib.request.urlopen(url) as response:
-        return response.read().decode()
-
-def fetch_all_urls(urls: list[str]) -> dict[str, str]:
-    """Fetch multiple URLs concurrently using threads."""
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        future_to_url = {executor.submit(fetch_url, url): url for url in urls}
-        results = {}
-        for future in concurrent.futures.as_completed(future_to_url):
-            url = future_to_url[future]
-            try:
-                results[url] = future.result()
-            except Exception as e:
-                results[url] = f"Error: {e}"
-    return results
+# 更好的实践：使用 with
+def process_file(filename: str):
+    try:
+        with open(filename, "r") as f:
+            # 处理文件
+            pass
+    except IOError as e:
+        print(f"Error reading file: {e}")
+        raise
 ```
 
-### Multiprocessing for CPU-Bound Tasks
+### 链式异常
 
 ```python
-def process_data(data: list[int]) -> int:
-    """CPU-intensive computation."""
-    return sum(x ** 2 for x in data)
-
-def process_all(datasets: list[list[int]]) -> list[int]:
-    """Process multiple datasets using multiple processes."""
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        results = list(executor.map(process_data, datasets))
-    return results
+def load_config(path: str) -> dict:
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except FileNotFoundError as e:
+        raise ConfigError(f"Config file not found: {path}") from e
+    except json.JSONDecodeError as e:
+        raise ConfigError(f"Invalid JSON in config: {path}") from e
 ```
 
-### Async/Await for Concurrent I/O
+## 并发
+
+### asyncio (Python 3.7+)
 
 ```python
 import asyncio
 
-async def fetch_async(url: str) -> str:
-    """Fetch a URL asynchronously."""
-    import aiohttp
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            return await response.text()
+async def fetch_data(url: str) -> dict:
+    """异步获取数据。"""
+    await asyncio.sleep(1)  # 模拟 I/O
+    return {"url": url, "data": "sample"}
 
-async def fetch_all(urls: list[str]) -> dict[str, str]:
-    """Fetch multiple URLs concurrently."""
-    tasks = [fetch_async(url) for url in urls]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    return dict(zip(urls, results))
+async def main():
+    # 并发运行多个协程
+    results = await asyncio.gather(
+        fetch_data("https://api.example.com/1"),
+        fetch_data("https://api.example.com/2"),
+        fetch_data("https://api.example.com/3")
+    )
+    for result in results:
+        print(result)
+
+asyncio.run(main())
 ```
 
-## Package Organization
+### 线程池
 
-### Standard Project Layout
+```python
+from concurrent.futures import ThreadPoolExecutor
+import time
+
+def process_item(item: int) -> int:
+    time.sleep(0.1)  # 模拟 I/O
+    return item * 2
+
+def main():
+    items = range(10)
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        results = list(executor.map(process_item, items))
+
+    print(results)
+
+if __name__ == "__main__":
+    main()
+```
+
+### 多进程 (CPU 密集型)
+
+```python
+from concurrent.futures import ProcessPoolExecutor
+import math
+
+def compute_factorial(n: int) -> int:
+    return math.factorial(n)
+
+def main():
+    numbers = [10000, 20000, 30000, 40000, 50000]
+
+    with ProcessPoolExecutor() as executor:
+        results = list(executor.map(compute_factorial, numbers))
+
+    for n, result in zip(numbers, results):
+        print(f"{n}! has {len(str(result))} digits")
+
+if __name__ == "__main__":
+    main()
+```
+
+## 包和模块组织
+
+### 标准项目结构
 
 ```
 myproject/
+├── pyproject.toml           # 现代 Python 项目配置
+├── README.md
 ├── src/
 │   └── mypackage/
 │       ├── __init__.py
 │       ├── main.py
-│       ├── api/
-│       │   ├── __init__.py
-│       │   └── routes.py
-│       ├── models/
-│       │   ├── __init__.py
-│       │   └── user.py
-│       └── utils/
-│           ├── __init__.py
-│           └── helpers.py
+│       ├── utils.py
+│       └── subpackage/
+│           └── __init__.py
 ├── tests/
 │   ├── __init__.py
-│   ├── conftest.py
-│   ├── test_api.py
-│   └── test_models.py
-├── pyproject.toml
-├── README.md
-└── .gitignore
+│   ├── test_main.py
+│   └── test_utils.py
+└── docs/
 ```
 
-### Import Conventions
+### __init__.py 最佳实践
 
 ```python
-# Good: Import order - stdlib, third-party, local
-import os
-import sys
-from pathlib import Path
-
-import requests
-from fastapi import FastAPI
-
-from mypackage.models import User
-from mypackage.utils import format_name
-
-# Good: Use isort for automatic import sorting
-# pip install isort
-```
-
-### __init__.py for Package Exports
-
-```python
-# mypackage/__init__.py
-"""mypackage - A sample Python package."""
+# src/mypackage/__init__.py
+"""我的包的简短描述。"""
 
 __version__ = "1.0.0"
 
-# Export main classes/functions at package level
-from mypackage.models import User, Post
-from mypackage.utils import format_name
+# 导出公共 API
+from mypackage.main import PublicClass, public_function
 
-__all__ = ["User", "Post", "format_name"]
+__all__ = ["PublicClass", "public_function", "__version__"]
 ```
 
-## Memory and Performance
-
-### Using __slots__ for Memory Efficiency
+### 相对导入
 
 ```python
-# Bad: Regular class uses __dict__ (more memory)
+# 在包内使用相对导入
+from . import utils
+from .subpackage import module
+from .. import parent_module
+```
+
+## 数据类
+
+### dataclass (Python 3.7+)
+
+```python
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class User:
+    """表示用户的简单数据类。"""
+    name: str
+    email: str
+    age: int = 0
+    friends: List['User'] = field(default_factory=list)
+
+    def send_message(self, message: str) -> None:
+        """发送消息给用户。"""
+        print(f"Sending to {self.name}: {message}")
+
+# 使用
+alice = User(name="Alice", email="alice@example.com", age=30)
+bob = User(name="Bob", email="bob@example.com")
+
+alice.friends.append(bob)
+```
+
+### 不可变 dataclass
+
+```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
 class Point:
-    def __init__(self, x: float, y: float):
-        self.x = x
-        self.y = y
+    """不可变的二维点。"""
+    x: float
+    y: float
 
-# Good: __slots__ reduces memory usage
-class Point:
-    __slots__ = ['x', 'y']
-
-    def __init__(self, x: float, y: float):
-        self.x = x
-        self.y = y
+# Point 继承自 tuple，不可修改
+p = Point(1.0, 2.0)
+# p.x = 3.0  # 引发 FrozenInstanceError
 ```
 
-### Generator for Large Data
+## 最佳实践
+
+### 1. 遵循 PEP 8
 
 ```python
-# Bad: Returns full list in memory
-def read_lines(path: str) -> list[str]:
-    with open(path) as f:
-        return [line.strip() for line in f]
+# 使用 pycodestyle 或 black 检查代码风格
+# pip install black
+# black myproject/
 
-# Good: Yields lines one at a time
-def read_lines(path: str) -> Iterator[str]:
-    with open(path) as f:
-        for line in f:
-            yield line.strip()
+# 函数和变量使用 snake_case
+def calculate_total(price: float, quantity: int) -> float:
+    return price * quantity
+
+# 类使用 PascalCase
+class ShoppingCart:
+    pass
+
+# 常量使用 UPPER_SNAKE_CASE
+MAX_RETRIES = 3
 ```
 
-### Avoid String Concatenation in Loops
-
-```python
-# Bad: O(n²) due to string immutability
-result = ""
-for item in items:
-    result += str(item)
-
-# Good: O(n) using join
-result = "".join(str(item) for item in items)
-
-# Good: Using StringIO for building
-from io import StringIO
-
-buffer = StringIO()
-for item in items:
-    buffer.write(str(item))
-result = buffer.getvalue()
-```
-
-## Python Tooling Integration
-
-### Essential Commands
+### 2. 使用虚拟环境
 
 ```bash
-# Code formatting
-black .
-isort .
+# 创建虚拟环境
+python -m venv .venv
 
-# Linting
-ruff check .
-pylint mypackage/
+# 激活虚拟环境
+source .venv/bin/activate  # Linux/Mac
+.venv\Scripts\activate     # Windows
 
-# Type checking
-mypy .
+# 安装依赖
+pip install -r requirements.txt
 
-# Testing
-pytest --cov=mypackage --cov-report=html
-
-# Security scanning
-bandit -r .
-
-# Dependency management
-pip-audit
-safety check
+# 导出依赖
+pip freeze > requirements.txt
 ```
 
-### pyproject.toml Configuration
+### 3. 文档字符串
 
-```toml
-[project]
-name = "mypackage"
-version = "1.0.0"
-requires-python = ">=3.9"
-dependencies = [
-    "requests>=2.31.0",
-    "pydantic>=2.0.0",
-]
+```python
+def calculate_compound_interest(
+    principal: float,
+    rate: float,
+    periods: int
+) -> float:
+    """计算复利。
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.4.0",
-    "pytest-cov>=4.1.0",
-    "black>=23.0.0",
-    "ruff>=0.1.0",
-    "mypy>=1.5.0",
-]
+    Args:
+        principal: 本金金额
+        rate: 每期利率（例如，0.05 表示 5%）
+        periods: 计息期数
 
-[tool.black]
-line-length = 88
-target-version = ['py39']
+    Returns:
+        最终金额，包括利息
 
-[tool.ruff]
-line-length = 88
-select = ["E", "F", "I", "N", "W"]
+    Example:
+        >>> calculate_compound_interest(1000, 0.05, 10)
+        1628.89...
+    """
+    return principal * (1 + rate) ** periods
+```
 
+### 4. 日志记录
+
+```python
+import logging
+
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+logger = logging.getLogger(__name__)
+
+def process_data(data: dict) -> None:
+    logger.debug(f"Processing data: {data}")
+
+    try:
+        result = complex_calculation(data)
+        logger.info("Calculation completed successfully")
+    except Exception as e:
+        logger.error(f"Calculation failed: {e}", exc_info=True)
+        raise
+
+# 使用
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
+    process_data({"key": "value"})
+```
+
+## 工具集成
+
+### 类型检查 (mypy)
+
+```bash
+# 安装 mypy
+pip install mypy
+
+# 运行类型检查
+mypy src/
+
+# pyproject.toml 配置
 [tool.mypy]
 python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "--cov=mypackage --cov-report=term-missing"
 ```
 
-## Quick Reference: Python Idioms
+### 代码格式化 (black)
 
-| Idiom | Description |
-|-------|-------------|
-| EAFP | Easier to Ask Forgiveness than Permission |
-| Context managers | Use `with` for resource management |
-| List comprehensions | For simple transformations |
-| Generators | For lazy evaluation and large datasets |
-| Type hints | Annotate function signatures |
-| Dataclasses | For data containers with auto-generated methods |
-| `__slots__` | For memory optimization |
-| f-strings | For string formatting (Python 3.6+) |
-| `pathlib.Path` | For path operations (Python 3.4+) |
-| `enumerate` | For index-element pairs in loops |
+```bash
+# 安装 black
+pip install black
 
-## Anti-Patterns to Avoid
+# 格式化代码
+black src/
 
-```python
-# Bad: Mutable default arguments
-def append_to(item, items=[]):
-    items.append(item)
-    return items
-
-# Good: Use None and create new list
-def append_to(item, items=None):
-    if items is None:
-        items = []
-    items.append(item)
-    return items
-
-# Bad: Checking type with type()
-if type(obj) == list:
-    process(obj)
-
-# Good: Use isinstance
-if isinstance(obj, list):
-    process(obj)
-
-# Bad: Comparing to None with ==
-if value == None:
-    process()
-
-# Good: Use is
-if value is None:
-    process()
-
-# Bad: from module import *
-from os.path import *
-
-# Good: Explicit imports
-from os.path import join, exists
-
-# Bad: Bare except
-try:
-    risky_operation()
-except:
-    pass
-
-# Good: Specific exception
-try:
-    risky_operation()
-except SpecificError as e:
-    logger.error(f"Operation failed: {e}")
+# 检查格式（不修改文件）
+black --check src/
 ```
 
-__Remember__: Python code should be readable, explicit, and follow the principle of least surprise. When in doubt, prioritize clarity over cleverness.
+### 导入排序 (isort)
+
+```bash
+# 安装 isort
+pip install isort
+
+# 排序导入
+isort src/
+
+# 与 black 配合使用
+isort --profile black src/
+```
+
+### 代码检查 (flake8/pylint)
+
+```bash
+# 安装 flake8
+pip install flake8
+
+# 运行检查
+flake8 src/
+
+# 安装 pylint
+pip install pylint
+
+# 运行 pylint
+pylint src/
+```
+
+## 快速参考
+
+| 惯用法 | 描述 |
+|--------|------|
+| 列表推导 | `[x for x in items if condition]` |
+| 上下文管理器 | `with open(file) as f:` |
+| enumerate | `for i, item in enumerate(items):` |
+| zip | `for a, b in zip(list_a, list_b):` |
+| 生成器表达式 | `(x for x in items)` - 内存高效 |
+| f-strings | `f"{variable}"` - Python 3.6+ |
+| dataclass | `@dataclass` - 简化类定义 |
+| 类型提示 | `def func(x: int) -> str:` |
+| asyncio | `async/await` - 异步编程 |
+
+**记住**：Python 代码应该是可读的。"胜于聪明，清晰更好。"代码被阅读的次数远多于被编写的次数。

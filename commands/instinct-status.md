@@ -3,7 +3,7 @@ description: 显示 Instincts 统计信息（v3.0 continuous-learning-v2）
 argument-hint: (可选) 查询选项
 ---
 
-# Instinct Status Command
+# /instinct-status - Instinct 状态命令 v3.0
 
 显示 instincts 统计信息。
 
