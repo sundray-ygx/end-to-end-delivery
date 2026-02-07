@@ -8,6 +8,94 @@ exported_by: "history-to-instincts converter"
 export_date: "2026-02-07T03:14:58.443107"
 
 instincts:
+  # === 新增: Phase 1 插件重构优化模式 (2026-02-07) ===
+
+  - id: plugin-refactoring
+    type: pattern
+    confidence: 0.95
+    domain: plugin-architecture
+    trigger: "插件命令过多，用户不知道从何开始"
+    action: "应用插件重构模式：命令分层 + 文档精简 + 渐进式重构"
+    source: end-to-end-delivery-refactor-phase1
+    title: 插件重构模式
+    description: |
+      当插件变得庞大、无序、杂乱无章时的重构方法：
+      1. 命令分层：Core / Workflow / Utility 三层结构
+      2. 文档重构：README → 快速开始 + 详细文档
+      3. 渐进式实施：Phase 1 快速见效 → Phase 2 核心重构 → Phase 3 完善提升
+    examples:
+      - 将 19 个命令重组为 3 层结构
+      - README 长度减少 50%+
+      - 100% 向后兼容
+    tags: [refactoring, plugin-architecture, documentation, command-organization]
+    observations: 1
+    added_at: "2026-02-07"
+
+  - id: documentation-layering
+    type: pattern
+    confidence: 0.90
+    domain: documentation
+    trigger: "README 过长导致信息过载"
+    action: "应用文档分层模式：快速开始 + 命令参考 + 详细文档"
+    source: end-to-end-delivery-refactor-phase1
+    title: 文档分层模式
+    description: |
+      当文档过长导致用户信息过载时的重构方法：
+      1. 快速开始：5 分钟上手指南
+      2. 命令参考表格：分类展示所有命令
+      3. 详细文档：链接到独立文档文件
+    examples:
+      - README 469 行 → 220 行 (-53%)
+      - 命令按 Core/Workflow/Utility 分类
+      - 独立文档：architecture.md, best-practices.md, configuration.md
+    tags: [documentation, refactoring, user-experience, information-architecture]
+    observations: 1
+    added_at: "2026-02-07"
+
+  - id: backward-compatibility-plugin
+    type: pattern
+    confidence: 0.92
+    domain: plugin-development
+    trigger: "重构插件时需要保持向后兼容"
+    action: "使用 plugin.json 递归命令搜索，无需创建重定向文件"
+    source: end-to-end-delivery-refactor-phase1
+    title: 插件向后兼容模式
+    description: |
+      Claude 插件重构时保持向后兼容的方法：
+      1. 使用 plugin.json 的递归命令搜索特性
+      2. 移动命令文件到子目录后，旧路径自动重定向
+      3. 无需创建额外的重定向文件或别名
+    examples:
+      - commands/deliver.md → commands/core/deliver.md
+      - plugin.json 中使用 "commands": "./commands" 实现递归搜索
+      - 100% 向后兼容，所有命令保持可用
+    tags: [backward-compatibility, plugin-development, refactoring, migration]
+    observations: 1
+    added_at: "2026-02-07"
+
+  - id: gradual-refactoring
+    type: pattern
+    confidence: 0.88
+    domain: project-management
+    trigger: "大型重构项目需要降低风险"
+    action: "应用渐进式重构：分阶段实施，每阶段都有明确价值"
+    source: end-to-end-delivery-refactor-phase1
+    title: 渐进式重构模式
+    description: |
+      大型重构项目的渐进式实施策略：
+      1. Phase 1: 快速见效 - 命令重组 + README 精简
+      2. Phase 2: 核心重构 - 工作流引擎 + 命令路由器
+      3. Phase 3: 完善提升 - 文档生成 + 插件化支持
+    examples:
+      - Phase 1: README -53%, 命令分层完成
+      - 每个阶段都有明确的验收标准
+      - 每个阶段都能独立交付价值
+    tags: [refactoring, project-management, risk-reduction, agile]
+    observations: 1
+    added_at: "2026-02-07"
+
+  # === 原有 Instincts (保留) ===
+
   - id: -plugin-
     trigger: "/plugin "
     action: "Execute or assist with this command pattern"

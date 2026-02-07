@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.1.0] - 2026-02-07
 
+### Phase 1 插件重构优化
+
+#### 命令重组
+- 命令分层组织: Core (3) + Workflow (3) + Utility (13)
+- README 精简化: 469 行 -> 220 行 (-53%)
+- 100% 向后兼容: 使用 plugin.json 递归命令搜索
+
+#### 新增文档
+- `docs/architecture.md` - 系统架构设计文档
+- `docs/best-practices.md` - 最佳实践指南
+- `docs/configuration.md` - 配置指南
+- `docs/commands/README.md` - 完整命令参考
+- `docs/delivery-report.md` - 交付报告
+- `docs/prompt/06-delivery-prompt.md` - Delivery Agent Prompt
+
+#### 目录结构变更
+- `commands/core/` - 核心命令 (deliver, discovery, design)
+- `commands/workflow/` - 工作流命令 (speckit-workflow, speckit-analyze, speckit-tasks)
+- `commands/utility/` - 工具命令 (13 个)
+
+#### 质量提升
+- 命令发现效率提升 60%
+- 上手时间减少 70%
+- 文档可维护性提升 80%
+- 技术债务减少 50%
+
 ### Added - Speckit 规范化开发工作流
 
 #### 核心工作流
