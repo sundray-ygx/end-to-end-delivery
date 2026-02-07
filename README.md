@@ -2,132 +2,54 @@
 
 整合 superpowers、everything-claude-code、feature-dev 三大插件精华，形成的完整端到端价值交付闭环开发流程。
 
-## 最新特性 v3.1
+**版本**: v3.1 | **许可**: MIT | **作者**: Claude Code User
 
-### 🎉 Speckit 规范化开发工作流
+---
 
-可选集成的 Speckit 框架增强功能，提供规范化的功能开发流程：
+## 快速开始
 
-#### 核心能力
+### 1. 安装插件
 
-- **智能分支管理** (`/speckit-branch`): 自动编号、短名称生成、三源检测
-- **宪法治理检查** (`/speckit-guard`): 质量门禁、复杂度论证、合规性验证
-- **一致性分析** (`/speckit-analyze`): 六重检测（重复/歧义/欠规格/宪法/覆盖/一致）
-- **任务依赖管理** (`/speckit-tasks`): [P]并行标记、用户故事分组、依赖关系可视化
-- **质量检查清单** (`/speckit-checklist`): "需求质量单元测试"、可追溯性验证
-- **完整工作流** (`/speckit-workflow`): 整合所有步骤的端到端流程
-
-#### 双模式设计
-
-- **传统 E2D 工作流**: 保持完整，向后兼容
-- **Speckit 增强模式**: 按需启用，嵌入各阶段质量保证
-
-#### 工作流阶段
-
-```
-Specify → Plan → Tasks → Analyze → Implement
-   ↓        ↓       ↓        ↓         ↓
-智能分支  宪法检查  任务分解   一致性    TDD执行
+```bash
+# 插件安装位置
+~/.claude/plugins/cache/local-plugins/end-to-end-delivery/
 ```
 
-**命令**: `/speckit-workflow "功能描述"`
+### 2. 配置权限
 
-## 最新特性 v3.0
+在 `.claude/settings.local.json` 中添加：
 
-### 🎉 新增核心能力
+```json
+{
+  "permissions": {
+    "allow": ["Skill(end-to-end-delivery:*)"]
+  }
+}
+```
 
-#### ui-design（UI/UX设计能力闭环）
-整合三大UI插件优势的端到端UI/UX设计能力：
+### 3. 开始使用
 
-- **设计系统生成**: 67种样式、96种调色板、57种字体搭配、25种图表
-- **高质量实现**: 独特美学方向、艺术性设计、避免通用AI美学
-- **规范验证**: Vercel Web Interface Guidelines审查、无障碍性检查
-- **13种技术栈支持**: HTML/Tailwind、React、Next.js、Vue、Svelte、SwiftUI、React Native、Flutter、shadcn/ui、Jetpack Compose等
+```bash
+# 启动完整的端到端流程
+/deliver "实现用户登录功能"
 
-**命令**: `/ui-design`
+# 或使用 Speckit 规范化工作流
+/speckit-workflow "实现用户登录功能"
 
-#### diagnostic-pro（诊断专家）
-整合三大插件优势的调试、诊断、修复系统，提供系统化的诊断能力：
+# 或分阶段执行
+/discovery "实现用户登录功能"
+/exploration
+/design
+/implement
+/verify
+/delivery
+```
 
-- **系统化调试技术**: 科学方法、二分调试、Rubber Duck 调试法
-- **构建错误修复**: 增量式修复、最小化改动原则
-- **错误处理模式**: 异常层次结构、Result 类型、重试与熔断
-- **安全诊断**: SQL 注入、XSS、密钥泄露检测
-- **数据库诊断**: 查询性能分析、死锁检测、索引优化
+---
 
-**命令**: `/diagnose`
+## 核心概念
 
-#### continuous-learning-v2（Instinct 学习）
-自动提取和演化可复用知识的学习系统：
-
-- **Observer Agent**: 通过 hooks 捕获会话数据
-- **Instincts**: 原子行为，带置信度评分（0.3-0.9）
-- **Evolution**: Instincts → Skills/Commands/Agents
-- **导入/导出**: 支持 Instincts 的分享和备份
-
-**命令**: `/instinct-export`, `/instinct-import`, `/instinct-status`, `/evolve`
-
-#### 多语言支持（Python/Go/C/C++）
-完整的全栈开发模式支持：
-
-- **Python**: python-patterns、python-testing、Django 支持
-- **Go**: golang-patterns、golang-testing、table-driven tests
-- **C/C++**: c-cpp-patterns（现代 C++）、c-cpp-testing（Google Test/Catch2）
-
-#### eval-harness（评估驱动开发）
-在需求阶段定义评估标准：
-
-- **Capability Evals**: 功能评估
-- **Regression Evals**: 回归评估
-- **pass@k 指标**: 可靠性测量
-
-#### database-reviewer（数据库专家）
-PostgreSQL 数据库架构审查：
-
-- 查询性能优化
-- 模式设计
-- 索引策略
-- RLS 设计
-
-#### iterative-retrieval（渐进式检索）
-解决子代理上下文问题：
-
-- DISPATCH → EVALUATE → REFINE → LOOP
-- 最多 3 次循环
-- 渐进式细化代码库理解
-
-## v2.0 特性（保留）
-
-### 🎉 本地模板融合
-
-支持与企业本地模板深度融合，利用模板提供的分析维度和框架，增强AI分析的深度和完整性：
-
-- **智能复杂度评估** - 自动评估需求复杂度，选择瀑布流或敏捷模式
-- **模板维度参考** - 本地模板提供分析框架和维度（如 INVEST 原则、架构设计方法）
-- **深度分析增强** - AI基于模板维度进行深度分析，而非简单填充模板
-- **编码规范检查** - 自动检测编程语言，加载对应的编码 checklist 进行审查
-
-## 概述
-
-本插件提供了一个完整的、可执行的、端到端的开发流程，从需求发现到价值交付，形成完整的闭环。
-
-### 核心特点
-
-- **端到端闭环**: 从需求到交付的完整流程
-- **质量优先**: 严格的质量门禁和验证
-- **证据优先**: 所有结论基于验证证据
-- **持续学习**: 每次交付都提取模式和最佳实践
-- **模板融合**: 支持本地开发流程模板融合（v2.0 新增）
-- **诊断系统**: 整合的调试、诊断、修复能力（v3.0 新增）
-- **多语言支持**: Python/Go/C/C++ 全栈开发（v3.0 新增）
-
-### 核心原则
-
-1. **Evidence Before Claims** - 证据优先于断言
-2. **Quality First** - 质量第一
-3. **Continuous Learning** - 持续学习
-
-## 工作流架构
+### 工作流架构
 
 ```
 Discovery → Exploration → Design → Implementation → Verification → Delivery
@@ -136,324 +58,147 @@ Discovery → Exploration → Design → Implementation → Verification → Del
     ↓           ↓            ↓         ↓            ↓          ↓
  澄清问题    映射架构    多方案对比   TDD执行     全面验证    模式提取
  定义标准    识别模式    权衡分析    两阶段审查   质量门禁    知识沉淀
-    ↓                                                       ↓
-  eval-harness                                       continuous-learning-v2
-  (评估驱动)                                        (Instinct学习)
 ```
 
-## 新增命令（v3.1）
+### 核心原则
 
-```bash
-# Speckit 规范化开发工作流（新增）
-/speckit-workflow "实现用户登录功能"
+1. **Evidence Before Claims** - 证据优先于断言
+2. **Quality First** - 质量第一
+3. **Continuous Learning** - 持续学习
 
-# Speckit 独立命令
-/speckit-branch "实现用户登录功能"           # 智能分支管理
-/speckit-guard                               # 宪法治理检查
-/speckit-tasks                               # 任务依赖管理
-/speckit-analyze                             # 一致性分析
-/speckit-checklist                           # 质量检查清单
+### 核心特点
 
-# UI/UX设计命令（v3.0）
-/ui-design "SaaS analytics dashboard" --project-name "DataViz Pro"
-/ui-design review src/components/Header.tsx
-/ui-design check --web-guidelines src/
-/ui-design search "glassmorphism dark" --domain style
+- **端到端闭环**: 从需求到交付的完整流程
+- **质量优先**: 严格的质量门禁和验证（测试覆盖率 ≥ 80%）
+- **证据优先**: 所有结论基于验证证据
+- **持续学习**: Instincts 自动提取和演化可复用知识
+- **Speckit 工作流**: 规范化开发流程（可选）
+- **诊断系统**: 整合的调试、诊断、修复能力
+- **多语言支持**: Python/Go/C/C++ 全栈开发
 
-# 诊断命令
-/diagnose "错误描述"
-/diagnose --type build "构建失败"
-/diagnose --type runtime "运行时异常"
-/diagnose --type performance "性能问题"
-/diagnose --type security "安全问题"
-/diagnose --type database "数据库问题"
+---
 
-# Instinct 管理命令
-/instinct-export
-/instinct-import <file>
-/instinct-status
-/evolve                    # 演化 Instincts 为 Skills/Commands/Agents
+## 命令参考
+
+### Core Commands (核心命令)
+
+| 命令 | 描述 | 文档 |
+|------|------|------|
+| `/deliver` | 完整端到端流程 | [详情](docs/commands/README.md#deliver) |
+| `/discovery` | 需求发现阶段 | [详情](docs/commands/README.md#discovery) |
+| `/design` | 架构设计阶段 | [详情](docs/commands/README.md#design) |
+
+### Workflow Commands (工作流命令)
+
+| 命令 | 描述 | 文档 |
+|------|------|------|
+| `/speckit-workflow` | Speckit 规范化工作流 | [详情](docs/commands/README.md#speckit-workflow) |
+| `/speckit-analyze` | 一致性分析 | [详情](docs/commands/README.md#speckit-analyze) |
+| `/speckit-tasks` | 任务依赖管理 | [详情](docs/commands/README.md#speckit-tasks) |
+
+### Utility Commands (工具命令)
+
+| 命令 | 描述 | 文档 |
+|------|------|------|
+| `/exploration` | 代码库探索 | [详情](docs/commands/README.md#exploration) |
+| `/implement` | 实施执行 | [详情](docs/commands/README.md#implement) |
+| `/verify` | 质量验证 | [详情](docs/commands/README.md#verify) |
+| `/delivery` | 价值交付 | [详情](docs/commands/README.md#delivery) |
+| `/speckit-branch` | 智能分支管理 | [详情](docs/commands/README.md#speckit-branch) |
+| `/speckit-guard` | 宪法治理检查 | [详情](docs/commands/README.md#speckit-guard) |
+| `/speckit-checklist` | 质量检查清单 | [详情](docs/commands/README.md#speckit-checklist) |
+| `/diagnose` | 诊断专家 | [详情](docs/commands/README.md#diagnose) |
+| `/ui-design` | UI/UX 设计 | [详情](docs/commands/README.md#ui-design) |
+| `/instinct-status` | Instincts 状态 | [详情](docs/commands/README.md#instinct-status) |
+| `/instinct-export` | 导出 Instincts | [详情](docs/commands/README.md#instinct-export) |
+| `/instinct-import` | 导入 Instincts | [详情](docs/commands/README.md#instinct-import) |
+| `/evolve` | 演化 Instincts | [详情](docs/commands/README.md#evolve) |
+
+---
+
+## 详细文档
+
+- [完整命令参考](docs/commands/README.md) - 所有命令的详细文档
+- [架构设计](docs/architecture.md) - 目录结构和架构说明
+- [配置指南](docs/configuration.md) - 安装和配置说明
+- [最佳实践](docs/best-practices.md) - 使用建议和技巧
+- [变更日志](CHANGELOG.md) - 版本更新记录
+
+---
+
+## Speckit 规范化工作流
+
+可选集成的 Speckit 框架增强功能：
+
+```
+Specify → Plan → Tasks → Analyze → Implement
+   ↓        ↓       ↓        ↓         ↓
+智能分支  宪法检查  任务分解   一致性    TDD执行
 ```
 
-## 原有命令
+**核心能力**:
+- 智能分支管理 (`/speckit-branch`)
+- 宪法治理检查 (`/speckit-guard`)
+- 一致性分析 (`/speckit-analyze`)
+- 任务依赖管理 (`/speckit-tasks`)
+- 质量检查清单 (`/speckit-checklist`)
 
-```bash
-# 启动完整的端到端交付流程
-/deliver "实现用户登录功能"
-
-# 或分阶段执行
-/discovery "实现用户登录功能"
-/exploration
-/design
-/implement
-/verify
-/delivery
-```
-
-## 目录结构（v3.1 更新）
-
-```
-end-to-end-delivery/
-├── .claude-plugin/           # 插件配置
-│   ├── plugin.json          # 插件元数据（v3.1 更新）
-│   └── marketplace.json     # 市场配置
-├── agents/                  # 代理定义
-│   ├── discovery-agent.md   # 需求发现代理（+eval-harness）
-│   ├── exploration-agent.md # 代码库探索代理（+iterative-retrieval）
-│   ├── design-agent.md      # 架构设计代理（+database-reviewer）
-│   ├── implementation-agent.md # 实施执行代理（多语言支持）
-│   ├── verification-agent.md # 质量验证代理（+诊断触发）
-│   ├── delivery-agent.md    # 交付管理代理（+continuous-learning-v2）
-│   ├── diagnostic-agent.md  # [新增] 诊断专家代理
-│   ├── observer-agent.md    # [新增] 持续学习观察者
-│   └── database-reviewer.md # [新增] 数据库专家代理
-├── skills/                  # 技能定义
-│   ├── ui-design/           # [新增] UI/UX设计能力闭环
-│   │   ├── SKILL.md         # 技能主文档
-│   │   ├── DESIGN_SYSTEM.md # 设计系统生成指南
-│   │   ├── GUIDELINES.md    # UI指南
-│   │   ├── IMPLEMENTATION.md # 实现指南
-│   │   ├── CHECKLIST.md     # 检查清单
-│   │   ├── scripts/         # Python脚本
-│   │   │   ├── core.py      # 核心功能
-│   │   │   ├── design_system.py # 设计系统生成器
-│   │   │   └── search.py    # 域搜索
-│   │   └── data/            # 设计数据
-│   │       ├── styles.csv   # 67种样式
-│   │       ├── colors.csv   # 96种调色板
-│   │       ├── typography.csv # 57种字体搭配
-│   │       ├── charts.csv   # 25种图表
-│   │       └── stacks/      # 13种技术栈配置
-│   ├── speckit-workflow/    # [新增] Speckit 规范化开发工作流
-│   ├── speckit-branch/      # [新增] 智能分支管理
-│   ├── speckit-guard/       # [新增] 宪法治理检查
-│   ├── speckit-tasks/       # [新增] 任务依赖管理
-│   ├── speckit-analyze/     # [新增] 一致性分析
-│   ├── speckit-checklist/   # [新增] 质量检查清单
-│   ├── end-to-end-workflow/ # 端到端工作流主技能（v3.1 更新）
-│   ├── template-adapter/    # 模板适配器技能
-│   ├── diagnostic-pro/      # [新增] 诊断专家技能
-│   │   └── modules/
-│   │       ├── debugging-strategies.md
-│   │       ├── build-fix.md
-│   │       ├── error-handling.md
-│   │       ├── security-diagnosis.md
-│   │       └── database-diagnosis.md
-│   ├── continuous-learning-v2/ # [新增] Instinct 学习
-│   │   ├── agents/observer.md
-│   │   ├── config.json
-│   │   ├── scripts/instinct-cli.py
-│   │   └── hooks/observe.sh
-│   ├── eval-harness/        # [新增] 评估驱动开发
-│   ├── python-patterns/     # [新增] Python 模式
-│   ├── python-testing/      # [新增] Python 测试
-│   ├── golang-patterns/     # [新增] Go 模式
-│   ├── golang-testing/      # [新增] Go 测试
-│   ├── c-cpp-patterns/      # [新增] C/C++ 模式
-│   └── c-cpp-testing/       # [新增] C/C++ 测试
-├── commands/                # 命令定义
-│   ├── speckit-workflow.md  # [新增] /speckit-workflow 命令
-│   ├── speckit-branch.md    # [新增] /speckit-branch 命令
-│   ├── speckit-guard.md     # [新增] /speckit-guard 命令
-│   ├── speckit-tasks.md     # [新增] /speckit-tasks 命令
-│   ├── speckit-analyze.md   # [新增] /speckit-analyze 命令
-│   ├── speckit-checklist.md # [新增] /speckit-checklist 命令
-│   ├── ui-design.md         # [新增] /ui-design 命令
-│   ├── deliver.md           # /deliver 命令（完整流程）
-│   ├── discovery.md         # /discovery 命令（需求发现阶段）
-│   ├── exploration.md       # /exploration 命令（代码库探索阶段）
-│   ├── design.md            # /design 命令（架构设计阶段）
-│   ├── implement.md         # /implement 命令（实施执行阶段）
-│   ├── verify.md            # /verify 命令（质量验证阶段）
-│   ├── delivery.md          # /delivery 命令（价值交付阶段）
-│   ├── diagnose/            # [新增] /diagnose 命令
-│   ├── instinct-export/     # [新增] /instinct-export 命令
-│   ├── instinct-import/     # [新增] /instinct-import 命令
-│   ├── instinct-status/     # [新增] /instinct-status 命令
-│   └── evolve/              # [新增] /evolve 命令
-├── utils/                   # 工具模块
-│   ├── complexity-evaluator.md # 复杂度评估工具
-│   ├── template-loader.md      # 模板加载工具
-│   ├── language-detector.md    # 语言检测工具
-│   └── template-adapter.md      # 模板适配器
-├── templates/               # 模板文件
-│   ├── requirements/        # 需求模板（瀑布流/敏捷）
-│   ├── design/              # 设计模板
-│   ├── coding/              # 编码 checklist（多语言）
-│   ├── testing/             # 测试 checklist（多语言）
-│   └── documentation/       # 文档模板
-├── CHANGELOG.md             # [新增] 变更日志
-└── README.md               # 本文件
-```
-
-## 快速开始
-
-### 1. 安装插件
-
-插件通过本地插件方式安装，实际运行位置：
-- **安装位置**: `~/.claude/plugins/cache/local-plugins/end-to-end-delivery/`
-- **源位置**: `~/.claude/plugins/marketplaces/end-to-end-delivery/`
-
-```bash
-# 从市场复制到本地（如需要）
-cp -r ~/.claude/plugins/marketplaces/end-to-end-delivery ~/.claude/plugins/
-```
-
-### 2. 使用主要命令
-
-```bash
-# 启动完整的端到端交付流程
-/deliver "实现用户登录功能"
-
-# 使用诊断命令（v3.0 新增）
-/diagnose "构建失败，提示类型错误"
-
-# 管理 Instincts（v3.0 新增）
-/instinct-status
-/evolve
-
-# 或分阶段执行
-/discovery "实现用户登录功能"
-/exploration
-/design
-/implement
-/verify
-/delivery
-```
+---
 
 ## 质量标准
 
-### 代码质量
-- 函数长度 ≤ 50 行
-- 文件长度 ≤ 800 行
-- 嵌套深度 ≤ 4 层
-- 命名清晰有意义
-
-### 测试质量
-- **测试覆盖率 ≥ 80%**（语句、分支、函数）
-- 快乐路径覆盖完整
-- 边界条件覆盖充分
-- 错误场景覆盖全面
-
-### 安全质量
-- 无硬编码密钥
-- 输入验证完整
-- 错误处理安全
-
-## 证据优先原则
+| 指标 | 标准 |
+|------|------|
+| 测试覆盖率 | ≥ 80% (语句、分支、函数) |
+| 函数长度 | ≤ 50 行 |
+| 文件长度 | ≤ 800 行 |
+| 嵌套深度 | ≤ 4 层 |
 
 **铁律**: NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 
-```markdown
-❌ 错误: "应该能通过测试"
-✅ 正确: "测试全部通过 (34/34), 覆盖率 95%"
+---
 
-❌ 错误: "看起来构建成功了"
-✅ 正确: "构建成功 (exit 0), 输出: dist/"
+## 目录结构
+
+```
+commands/
+├── core/           # 核心命令 (3个)
+├── workflow/       # 工作流命令 (3个)
+└── utility/        # 工具命令 (13个)
+
+agents/             # 9 个代理
+skills/             # 17+ 个技能
+templates/          # 需求/设计/编码/测试模板
+docs/               # 详细文档
 ```
 
-## 配置
+完整结构请参考 [架构文档](docs/architecture.md)。
 
-### 权限配置（v3.1 更新）
-
-在 `.claude/settings.local.json` 中添加新技能的权限：
-
-```json
-{
-  "permissions": {
-    "allow": [
-      "Skill(end-to-end-delivery:ui-design)",
-      "Skill(end-to-end-delivery:diagnostic-pro)",
-      "Skill(end-to-end-delivery:continuous-learning-v2)",
-      "Skill(end-to-end-delivery:eval-harness)",
-      "Skill(end-to-end-delivery:python-patterns)",
-      "Skill(end-to-end-delivery:python-testing)",
-      "Skill(end-to-end-delivery:golang-patterns)",
-      "Skill(end-to-end-delivery:golang-testing)",
-      "Skill(end-to-end-delivery:c-cpp-patterns)",
-      "Skill(end-to-end-delivery:c-cpp-testing)",
-      "Skill(end-to-end-delivery:speckit-workflow)",
-      "Skill(end-to-end-delivery:speckit-branch)",
-      "Skill(end-to-end-delivery:speckit-guard)",
-      "Skill(end-to-end-delivery:speckit-tasks)",
-      "Skill(end-to-end-delivery:speckit-analyze)",
-      "Skill(end-to-end-delivery:speckit-checklist)"
-    ]
-  }
-}
-```
+---
 
 ## 最佳实践
 
-### 1. 从小开始
-- 先在简单功能上实践
-- 逐步增加复杂度
+1. **从小开始** - 先在简单功能上实践，逐步增加复杂度
+2. **频繁验证** - 每个小步骤后验证，不要等到最后
+3. **及时沟通** - 遇到问题及时使用 `/diagnose`
+4. **记录决策** - 架构决策自动记录在实施蓝图
+5. **持续改进** - 每次交付后使用 `/delivery` 提取模式
 
-### 2. 频繁验证
-- 每个小步骤后验证
-- 不要等到最后
+更多最佳实践请参考 [最佳实践文档](docs/best-practices.md)。
 
-### 3. 及时沟通
-- 遇到问题及时沟通
-- 不要假设
-
-### 4. 记录决策
-- 记录重要的架构决策
-- 记录权衡的考虑
-
-### 5. 持续改进（v3.0 增强）
-- 每次交付后总结
-- 使用 Instincts 自动提取知识
-- 使用 evolve 演化为可复用技能
-
-## 与其他插件的关系
-
-本插件整合了以下插件的精华:
-
-### UI/UX Design
-- Design System Generator（67种样式、96种调色板、57种字体搭配）
-- Frontend Design（高质量美学实现）
-- Web Design Guidelines（Vercel规范验证）
-
-### Superpowers
-- Subagent-Driven Development
-- Writing Plans
-- Verification Before Completion
-
-### Everything Claude Code
-- Verification Loop
-- TDD Workflow
-- Continuous Learning v2
-- Python/Go/C/C++ Skills
-- Database Reviewer
-- Iterative Retrieval
-
-### Feature Dev
-- Codebase Exploration
-- Architecture Design
-- Quality Review
-
-### Developer Essentials
-- Debugging Strategies
-- Error Handling Patterns
-
-## 变更日志
-
-查看 [CHANGELOG.md](CHANGELOG.md) 了解详细版本更新记录。
+---
 
 ## 贡献
 
 欢迎贡献改进!
 
 1. Fork 项目
-2. 创建特性分支
-3. 提交更改
-4. 推送到分支
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'feat: add AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 创建 Pull Request
 
-## 许可证
-
-MIT License
+---
 
 ## 致谢
 
@@ -461,6 +206,12 @@ MIT License
 - [superpowers](https://github.com/obra/superpowers)
 - [everything-claude-code](https://github.com/affaan-m/everything-claude-code)
 - [claude-plugins-official](https://github.com/anthropics/claude-plugins-official)
+
+---
+
+## 许可证
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
 
 ---
 
