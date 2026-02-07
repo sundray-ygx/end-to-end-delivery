@@ -3,36 +3,6 @@
 #
 # Captures tool use events for pattern analysis.
 # Claude Code passes hook data via stdin as JSON.
-#
-# Hook config (in ~/.claude/settings.json):
-#
-# If installed as a plugin, use ${CLAUDE_PLUGIN_ROOT}:
-# {
-#   "hooks": {
-#     "PreToolUse": [{
-#       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre" }]
-#     }],
-#     "PostToolUse": [{
-#       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post" }]
-#     }]
-#   }
-# }
-#
-# If installed manually to ~/.claude/skills:
-# {
-#   "hooks": {
-#     "PreToolUse": [{
-#       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh pre" }]
-#     }],
-#     "PostToolUse": [{
-#       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh post" }]
-#     }]
-#   }
-# }
 
 set -e
 
@@ -56,13 +26,20 @@ if [ -z "$INPUT_JSON" ]; then
   exit 0
 fi
 
-# Parse using python (more reliable than jq for complex JSON)
-PARSED=$(python3 << EOF
+# Parse using python (pass JSON via environment to avoid shell escaping issues)
+export INPUT_JSON
+PARSED=$(python3 << 'PYEOF'
 import json
+import os
 import sys
 
 try:
-    data = json.loads('''$INPUT_JSON''')
+    input_json = os.environ.get('INPUT_JSON', '')
+    if not input_json:
+        print(json.dumps({'parsed': False, 'error': 'No input'}))
+        sys.exit(0)
+
+    data = json.loads(input_json)
 
     # Extract fields - Claude Code hook format
     hook_type = data.get('hook_type', 'unknown')  # PreToolUse or PostToolUse
@@ -95,7 +72,7 @@ try:
     }))
 except Exception as e:
     print(json.dumps({'parsed': False, 'error': str(e)}))
-EOF
+PYEOF
 )
 
 # Check if parsing succeeded
@@ -121,25 +98,30 @@ fi
 # Build and write observation
 timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-python3 << EOF
-import json
+export PARSED
+export OBSERVATIONS_FILE
+export timestamp
 
-parsed = json.loads('''$PARSED''')
+python3 << 'PYEOF'
+import json
+import os
+
+parsed = json.loads(os.environ.get('PARSED', '{}'))
 observation = {
-    'timestamp': '$timestamp',
-    'event': parsed['event'],
-    'tool': parsed['tool'],
-    'session': parsed['session']
+    'timestamp': os.environ.get('timestamp', ''),
+    'event': parsed.get('event', ''),
+    'tool': parsed.get('tool', ''),
+    'session': parsed.get('session', '')
 }
 
-if parsed['input']:
+if parsed.get('input'):
     observation['input'] = parsed['input']
-if parsed['output']:
+if parsed.get('output'):
     observation['output'] = parsed['output']
 
-with open('$OBSERVATIONS_FILE', 'a') as f:
+with open(os.environ.get('OBSERVATIONS_FILE'), 'a') as f:
     f.write(json.dumps(observation) + '\n')
-EOF
+PYEOF
 
 # Signal observer if running
 OBSERVER_PID_FILE="${CONFIG_DIR}/.observer.pid"
