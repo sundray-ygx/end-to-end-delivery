@@ -2,6 +2,36 @@
 
 整合 superpowers、everything-claude-code、feature-dev 三大插件精华，形成的完整端到端价值交付闭环开发流程。
 
+## 最新特性 v3.1
+
+### 🎉 Speckit 规范化开发工作流
+
+可选集成的 Speckit 框架增强功能，提供规范化的功能开发流程：
+
+#### 核心能力
+
+- **智能分支管理** (`/speckit-branch`): 自动编号、短名称生成、三源检测
+- **宪法治理检查** (`/speckit-guard`): 质量门禁、复杂度论证、合规性验证
+- **一致性分析** (`/speckit-analyze`): 六重检测（重复/歧义/欠规格/宪法/覆盖/一致）
+- **任务依赖管理** (`/speckit-tasks`): [P]并行标记、用户故事分组、依赖关系可视化
+- **质量检查清单** (`/speckit-checklist`): "需求质量单元测试"、可追溯性验证
+- **完整工作流** (`/speckit-workflow`): 整合所有步骤的端到端流程
+
+#### 双模式设计
+
+- **传统 E2D 工作流**: 保持完整，向后兼容
+- **Speckit 增强模式**: 按需启用，嵌入各阶段质量保证
+
+#### 工作流阶段
+
+```
+Specify → Plan → Tasks → Analyze → Implement
+   ↓        ↓       ↓        ↓         ↓
+智能分支  宪法检查  任务分解   一致性    TDD执行
+```
+
+**命令**: `/speckit-workflow "功能描述"`
+
 ## 最新特性 v3.0
 
 ### 🎉 新增核心能力
@@ -111,10 +141,20 @@ Discovery → Exploration → Design → Implementation → Verification → Del
   (评估驱动)                                        (Instinct学习)
 ```
 
-## 新增命令（v3.0）
+## 新增命令（v3.1）
 
 ```bash
-# UI/UX设计命令（新增）
+# Speckit 规范化开发工作流（新增）
+/speckit-workflow "实现用户登录功能"
+
+# Speckit 独立命令
+/speckit-branch "实现用户登录功能"           # 智能分支管理
+/speckit-guard                               # 宪法治理检查
+/speckit-tasks                               # 任务依赖管理
+/speckit-analyze                             # 一致性分析
+/speckit-checklist                           # 质量检查清单
+
+# UI/UX设计命令（v3.0）
 /ui-design "SaaS analytics dashboard" --project-name "DataViz Pro"
 /ui-design review src/components/Header.tsx
 /ui-design check --web-guidelines src/
@@ -135,7 +175,7 @@ Discovery → Exploration → Design → Implementation → Verification → Del
 /evolve                    # 演化 Instincts 为 Skills/Commands/Agents
 ```
 
-## 原有命令（保留）
+## 原有命令
 
 ```bash
 # 启动完整的端到端交付流程
@@ -150,12 +190,12 @@ Discovery → Exploration → Design → Implementation → Verification → Del
 /delivery
 ```
 
-## 目录结构（v3.0 更新）
+## 目录结构（v3.1 更新）
 
 ```
 end-to-end-delivery/
 ├── .claude-plugin/           # 插件配置
-│   ├── plugin.json          # 插件元数据（v3.0 更新）
+│   ├── plugin.json          # 插件元数据（v3.1 更新）
 │   └── marketplace.json     # 市场配置
 ├── agents/                  # 代理定义
 │   ├── discovery-agent.md   # 需求发现代理（+eval-harness）
@@ -184,7 +224,13 @@ end-to-end-delivery/
 │   │       ├── typography.csv # 57种字体搭配
 │   │       ├── charts.csv   # 25种图表
 │   │       └── stacks/      # 13种技术栈配置
-│   ├── end-to-end-workflow/ # 端到端工作流主技能（v3.0 更新）
+│   ├── speckit-workflow/    # [新增] Speckit 规范化开发工作流
+│   ├── speckit-branch/      # [新增] 智能分支管理
+│   ├── speckit-guard/       # [新增] 宪法治理检查
+│   ├── speckit-tasks/       # [新增] 任务依赖管理
+│   ├── speckit-analyze/     # [新增] 一致性分析
+│   ├── speckit-checklist/   # [新增] 质量检查清单
+│   ├── end-to-end-workflow/ # 端到端工作流主技能（v3.1 更新）
 │   ├── template-adapter/    # 模板适配器技能
 │   ├── diagnostic-pro/      # [新增] 诊断专家技能
 │   │   └── modules/
@@ -206,6 +252,12 @@ end-to-end-delivery/
 │   ├── c-cpp-patterns/      # [新增] C/C++ 模式
 │   └── c-cpp-testing/       # [新增] C/C++ 测试
 ├── commands/                # 命令定义
+│   ├── speckit-workflow.md  # [新增] /speckit-workflow 命令
+│   ├── speckit-branch.md    # [新增] /speckit-branch 命令
+│   ├── speckit-guard.md     # [新增] /speckit-guard 命令
+│   ├── speckit-tasks.md     # [新增] /speckit-tasks 命令
+│   ├── speckit-analyze.md   # [新增] /speckit-analyze 命令
+│   ├── speckit-checklist.md # [新增] /speckit-checklist 命令
 │   ├── ui-design.md         # [新增] /ui-design 命令
 │   ├── deliver.md           # /deliver 命令（完整流程）
 │   ├── discovery.md         # /discovery 命令（需求发现阶段）
@@ -302,7 +354,7 @@ cp -r ~/.claude/plugins/marketplaces/end-to-end-delivery ~/.claude/plugins/
 
 ## 配置
 
-### 权限配置（v3.0 更新）
+### 权限配置（v3.1 更新）
 
 在 `.claude/settings.local.json` 中添加新技能的权限：
 
@@ -319,7 +371,13 @@ cp -r ~/.claude/plugins/marketplaces/end-to-end-delivery ~/.claude/plugins/
       "Skill(end-to-end-delivery:golang-patterns)",
       "Skill(end-to-end-delivery:golang-testing)",
       "Skill(end-to-end-delivery:c-cpp-patterns)",
-      "Skill(end-to-end-delivery:c-cpp-testing)"
+      "Skill(end-to-end-delivery:c-cpp-testing)",
+      "Skill(end-to-end-delivery:speckit-workflow)",
+      "Skill(end-to-end-delivery:speckit-branch)",
+      "Skill(end-to-end-delivery:speckit-guard)",
+      "Skill(end-to-end-delivery:speckit-tasks)",
+      "Skill(end-to-end-delivery:speckit-analyze)",
+      "Skill(end-to-end-delivery:speckit-checklist)"
     ]
   }
 }

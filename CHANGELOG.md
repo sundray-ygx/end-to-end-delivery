@@ -5,6 +5,81 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-02-07
+
+### Added - Speckit 规范化开发工作流
+
+#### 核心工作流
+- speckit-workflow skill: 完整的规范化功能开发流程
+- 整合规格生成、技术计划、任务分解、一致性分析、实施执行
+
+#### 智能分支管理 (speckit-branch)
+- 自动检测现有分支并分配下一个可用编号
+- 从功能描述提取 2-4 词短名称
+- 三源检测（远程分支、本地分支、specs 目录）
+- 分支命名格式: {NUMBER}-{SHORT-NAME}
+
+#### 宪法治理检查 (speckit-guard)
+- TDD 合规性验证
+- 价值优先原则检查
+- 规格质量标准验证
+- 复杂度论证记录
+- 质量门禁控制
+
+#### 一致性分析 (speckit-analyze)
+- 六重一致性检测:
+  - 重复检测: 识别相似需求
+  - 歧义检测: 标记模糊形容词
+  - 欠规格检测: 缺失的验收标准
+  - 宪法对齐: 检查合规性冲突
+  - 覆盖率缺口: 需求到任务的覆盖
+  - 不一致性: 术语漂移、冲突需求
+- 严重程度分级 (CRITICAL/HIGH/MEDIUM/LOW)
+
+#### 任务依赖管理 (speckit-tasks)
+- 用户故事分组 (US1, US2, US3...)
+- [P] 并行执行标记
+- 依赖关系定义和可视化
+- 分阶段任务组织 (Setup → Foundational → User Stories → Polish)
+
+#### 质量检查清单 (speckit-checklist)
+- "需求质量单元测试"概念
+- 可追溯性验证
+- 质量维度检查
+- 自动生成忽略文件
+
+### Changed - 工作流增强
+
+#### end-to-end-workflow skill
+- 各阶段新增 Speckit 增强选项
+- Discovery 阶段: 可选调用 speckit-branch
+- Design 阶段: 可选调用 speckit-guard、speckit-analyze
+- Implementation 阶段: 可选调用 speckit-tasks、speckit-checklist
+- Verification 阶段: 可选调用 speckit-analyze、speckit-guard
+- Delivery 阶段: 可选调用 speckit-checklist
+
+### Changed - 配置更新
+
+- plugin.json: 版本更新至 3.1.0，新增 speckit 相关关键词
+
+### Added - 新增命令
+
+- `/speckit-workflow` - Speckit 规范化开发工作流
+- `/speckit-branch` - 智能分支管理
+- `/speckit-analyze` - 一致性分析
+- `/speckit-guard` - 宪法治理检查
+- `/speckit-tasks` - 任务依赖管理
+- `/speckit-checklist` - 质量检查清单
+
+### Added - 新增技能
+
+- speckit-workflow skill: 完整工作流
+- speckit-branch skill: 智能分支管理
+- speckit-analyze skill: 一致性分析
+- speckit-guard skill: 宪法治理检查
+- speckit-tasks skill: 任务依赖管理
+- speckit-checklist skill: 质量检查清单
+
 ## [3.0.0] - 2026-02-03
 
 ### Added - 核心能力
