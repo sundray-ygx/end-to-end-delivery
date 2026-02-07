@@ -1,0 +1,305 @@
+# History Instincts Export
+# Generated: 2026-02-07T03:14:58.443093
+# Source: ~/.claude/history.jsonl
+# Total entries: 1405
+
+version: "2.0"
+exported_by: "history-to-instincts converter"
+export_date: "2026-02-07T03:14:58.443107"
+
+instincts:
+  - id: -plugin-
+    trigger: "/plugin "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.9
+    domain: claude-commands
+    observations: 174
+
+  - id: -exit-
+    trigger: "/exit "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.9
+    domain: claude-commands
+    observations: 152
+
+  - id: -clear-
+    trigger: "/clear "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.8
+    domain: claude-commands
+    observations: 69
+
+  - id: 继续
+    trigger: "继续"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.6
+    domain: chinese-workflow
+    observations: 40
+
+  - id: -
+    trigger: "/"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.5
+    domain: claude-commands
+    observations: 22
+
+  - id: -mcp-
+    trigger: "/mcp "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: claude-commands
+    observations: 21
+
+  - id: -resume-
+    trigger: "/resume "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: claude-commands
+    observations: 21
+
+  - id: 确认
+    trigger: "确认"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: chinese-workflow
+    observations: 20
+
+  - id: -end
+    trigger: "/end"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: claude-commands
+    observations: 19
+
+  - id: -status-
+    trigger: "/status "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: claude-commands
+    observations: 9
+
+  - id: -cost-
+    trigger: "/cost "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: claude-commands
+    observations: 9
+
+  - id: hello
+    trigger: "hello"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: general
+    observations: 9
+
+  - id: -config-
+    trigger: "/config "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: claude-commands
+    observations: 8
+
+  - id: -pwd
+    trigger: "!pwd"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: general
+    observations: 8
+
+  - id: -model-
+    trigger: "/model "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.4
+    domain: claude-commands
+    observations: 8
+
+  - id: quit
+    trigger: "quit"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: general
+    observations: 6
+
+  - id: -exit
+    trigger: "/exit"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 6
+
+  - id: -plugin-install-document-skill
+    trigger: "/plugin install document-skills@anthropic-agent-sk"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 6
+
+  - id: status
+    trigger: "status"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: general
+    observations: 5
+
+  - id: -context-
+    trigger: "/context "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 5
+
+  - id: exit
+    trigger: "exit"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: general
+    observations: 5
+
+  - id: -skills-
+    trigger: "/skills "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 4
+
+  - id: -hooks-
+    trigger: "/hooks "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 4
+
+  - id: -plugin
+    trigger: "/plugin"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 4
+
+  - id: 探索插件的结构和功能-可以直接搜索----claude-pl
+    trigger: "探索插件的结构和功能，可以直接搜索 ~/.claude/plugins/marketplaces 和"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 4
+
+  - id: -end-to-end-delivery-deliver-
+    trigger: "/end-to-end-delivery:deliver "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 4
+
+  - id: 确认执行
+    trigger: "确认执行"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 4
+
+  - id: -plugin-marketplace-add--root-
+    trigger: "/plugin marketplace add /root/claude-workspace/cla"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 4
+
+  - id: 需求-设计以及探索的文档也没有保存到-docs-目录-以及对
+    trigger: "需求、设计以及探索的文档也没有保存到 docs/目录，以及对应阶段的prompt也没有保存
+另外，建"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 4
+
+  - id: -instinct-status-
+    trigger: "/instinct-status "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 4
+
+  - id: 上传账单文件还是报错了-见日志error-txt-另外-仍然
+    trigger: "上传账单文件还是报错了，见日志error.txt；另外，仍然出现循环打印日志：watchfiles."
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 3
+
+  - id: 是
+    trigger: "是"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 3
+
+  - id: 需要
+    trigger: "需要"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 3
+
+  - id: -plugin-list
+    trigger: "/plugin list"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 3
+
+  - id: -agents-
+    trigger: "/agents "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 3
+
+  - id: 读取userpromptsubmit-py-完成任务-
+    trigger: "读取userpromptsubmit.py，完成任务。"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 3
+
+  - id: 当前安装了太多的plugin-包括了太多的agent和ski
+    trigger: "当前安装了太多的plugin，包括了太多的agent和skill，现希望做简化，仅保留日常使用频度高"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 3
+
+  - id: 错误日志不是当前项目出现的-而且使用命令行时-返回的错误信息
+    trigger: "错误日志不是当前项目出现的，而且使用命令行时，返回的错误信息，猜测跟使用Claude本身的配置有关系"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: chinese-workflow
+    observations: 3
+
+  - id: -feature-dev-extended
+    trigger: "/feature-dev-extended"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 3
+
+  - id: -plugin-install-end-to-end-del
+    trigger: "/plugin install end-to-end-delivery@/root/.claude/"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 3
+
+  - id: -end-to-end-delivery-deliver--
+    trigger: "/end-to-end-delivery:deliver "分析/mnt/hgfs/code/sha"
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 3
+
+  - id: -end-to-end-delivery-deliver-c
+    trigger: "/end-to-end-delivery:deliver:command "
+    action: "Execute or assist with this command pattern"
+    confidence: 0.3
+    domain: claude-commands
+    observations: 3
+
